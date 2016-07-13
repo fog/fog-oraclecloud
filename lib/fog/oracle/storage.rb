@@ -9,6 +9,7 @@ module Fog
 
 			request_path 'fog/oracle/requests/storage'
 			request :list_volumes
+			request :create_volume
 
 			class Real
       	def initialize(options={})
@@ -70,6 +71,10 @@ module Fog
           end
           response
         end
+      end
+
+      class Mock
+
       end
     end
   end
