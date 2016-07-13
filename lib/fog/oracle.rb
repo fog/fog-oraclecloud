@@ -1,5 +1,6 @@
 require 'fog/core'
 require 'fog/json'
+require 'fog/xml'
 
 require File.expand_path('../oracle/version', __FILE__)
 
