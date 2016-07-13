@@ -9,9 +9,14 @@ module Fog
   	autoload :Oracle, File.expand_path('../oracle/compute', __FILE__)
   end
 
+  module Storage
+  	autoload :Oracle, File.expand_path('../oracle/storage', __FILE__)
+  end
+
   module Oracle
   	extend Fog::Provider
 
   	service(:compute, 'Compute')
+  	service(:storage, 'Storage')
   end
 end
