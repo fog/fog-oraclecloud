@@ -6,7 +6,6 @@ module Fog
 	    class Image < Fog::Model
 	      identity  :name
 
-	      attribute :name
 	      attribute :uri
 	      attribute :default
 	      attribute :description
@@ -25,6 +24,12 @@ module Fog
           
           data = service.create_image(name, description,
                                             :default => default)
+        end
+
+        def update
+        	requires :name
+
+        	data = service.update_image(name, :description=>description, :default=>default)
         end
 	    end
 	  end

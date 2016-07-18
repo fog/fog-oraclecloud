@@ -2,7 +2,8 @@ module Fog
   module Compute
     class Oracle
       class Real
-				def get_iamge(name)
+				def get_image(name)
+          name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
  					response = request(
             :expects  => 200,
             :method   => 'GET',
