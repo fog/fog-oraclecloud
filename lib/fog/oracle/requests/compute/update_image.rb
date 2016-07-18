@@ -13,8 +13,8 @@ module Fog
           body_data = body_data.reject {|key, value| value.nil?}
           request(
             :method   => 'PUT',
-            :expects  => 201,
-            :path     => "/imagelist/Compute-#{@identity_domain}/#{@username}/",
+            :expects  => 200,
+            :path     => "/imagelist/Compute-#{@identity_domain}/#{@username}/#{name}",
             :body     => Fog::JSON.encode(body_data),
             :headers  => {
               'Content-Type' => 'application/oracle-compute-v3+json'

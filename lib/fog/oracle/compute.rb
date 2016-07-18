@@ -32,6 +32,7 @@ module Fog
       request :list_images
       request :get_image
       request :create_image
+      request :update_image
 
 			class Real
 
@@ -80,8 +81,8 @@ module Fog
 						}), &block)
 					rescue Excon::Errors::HTTPStatusError => error
 						raise case error
-						when Excon::Errors::NotFound
-							Fog::Oracle::Java::NotFound.slurp(error)
+						#when Excon::Errors::NotFound
+							#Fog::Oracle::Java::NotFound.slurp(error)
 						when Excon::Errors::Conflict
 							data = Fog::JSON.decode(error.response.body)
 							raise Error.new(data['message'])
