@@ -17,7 +17,7 @@ module Fog
       collection :images
 
       model :image_list
-      collection :image_list
+      collection :image_lists
 
 			request_path 'fog/oracle/requests/compute'
      	request :list_security_applications
@@ -32,10 +32,8 @@ module Fog
 
  			request :list_security_lists
 
-      request :list_images
       request :get_image
       request :create_image
-      request :update_image
       request :delete_image
 
       request :list_image_lists

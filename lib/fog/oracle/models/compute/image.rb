@@ -6,13 +6,9 @@ module Fog
 	    class Image < Fog::Model
 	      identity  :name
 
-	      attribute :uri
-	      attribute :default
-	      attribute :description
-	      attribute :entries
-
-	      # Only used in create
-	      attribute :default
+	      attribute :version
+	      attribute :attributes
+	      attribute :machineimages
 
  				def save
           #identity ? update : create
@@ -22,19 +18,12 @@ module Fog
         def create
         	requires :name, :description
           
-          data = service.create_image(name, description,
-                                            :default => default)
-        end
-
-        def update
-        	requires :name
-
-        	data = service.update_image(name, :description=>description, :default=>default)
+          data = service.create_image(name, version, attributes, machineimages)
         end
 
         def delete
         	requires :name
-        	service.delete_image(name)
+        	service.delete_image(name, version)
         end
 	    end
 	  end

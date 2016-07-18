@@ -8,13 +8,8 @@ module Fog
 
 	    	model Fog::Compute::Oracle::Image
 				
-				def all
-					data = service.list_images().body['result']
-					load(data)
-				end
-
- 				def get(name)
-          data = service.get_image(name).body
+ 				def get(name, version)
+          data = service.get_image(name, version).body
           new(data)
         end
 	    end
