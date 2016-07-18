@@ -2,7 +2,7 @@ module Fog
   module Compute
     class Oracle
       class Real
-      	def delete_image (name)
+      	def delete_image_list (name)
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
           request(
             :method   => 'DELETE',

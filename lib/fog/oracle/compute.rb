@@ -16,6 +16,9 @@ module Fog
       model :image
       collection :images
 
+      model :image_list
+      collection :image_list
+
 			request_path 'fog/oracle/requests/compute'
      	request :list_security_applications
      	request :create_security_application
@@ -34,6 +37,12 @@ module Fog
       request :create_image
       request :update_image
       request :delete_image
+
+      request :list_image_lists
+      request :get_image_list
+      request :create_image_list
+      request :update_image_list
+      request :delete_image_list
 
 			class Real
 

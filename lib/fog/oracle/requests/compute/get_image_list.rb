@@ -2,17 +2,19 @@ module Fog
   module Compute
     class Oracle
       class Real
-      	def delete_image (name)
+				def get_image_list(name)
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
-          request(
-            :method   => 'DELETE',
-            :expects  => 204,
+ 					response = request(
+            :expects  => 200,
+            :method   => 'GET',
             :path     => "/imagelist/Compute-#{@identity_domain}/#{@username}/#{name}",
             :headers  => {
-              'Content-Type' => 'application/oracle-compute-v3+json'
+              'Content-Type' => 'application/oracle-compute-v3+json',
+              'Accept' => 'application/oracle-compute-v3+json'
             }
           )
-      	end
+          response
+        end
       end
     end
   end
