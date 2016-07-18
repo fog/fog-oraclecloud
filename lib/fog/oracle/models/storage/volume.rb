@@ -25,7 +25,6 @@ module Fog
         attribute :shared
         attribute :imagelist
         attribute :size
-        attribute :name
 
  				def save
           #identity ? update : create
@@ -33,13 +32,9 @@ module Fog
         end
 
 				def create
-        	requires :name
-          
-          #data = service.create_security_application(name, protocol,
-          #                                  :dport => dport,
-          #                                  :icmptype => icmptype,
-          #                                  :icmpcode => icmpcode,
-          #                                  :description => description)
+        	requires :name, :size
+
+          data = service.create_volume(name, size)
         end
 
         def destroy

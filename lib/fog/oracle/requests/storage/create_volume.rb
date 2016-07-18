@@ -1,5 +1,5 @@
 module Fog
-  module Compute
+  module Storage
     class Oracle
       class Real
       	def create_volume(name, size, high_latency = false, options={})
@@ -9,21 +9,21 @@ module Fog
             'size'						    => size,
             'properties'          => []
           }
-          body_data.properties.push(high_latency ? "/oracle/public/storage/latency" : '/oracle/public/storage/default')
+          body_data['properties'].push(high_latency ? "/oracle/public/storage/latency" : '/oracle/public/storage/default')
           body_data = body_data.reject {|key, value| value.nil?}
-          puts body_data
 
-          #request(
-          #  :method   => 'POST',
-          #  :expects  => 201,
-          #  :path     => "/volume/",
-          #  :body     => Fog::JSON.encode(body_data),
-          # :headers  => {
-          #   'Content-Type' => 'application/oracle-compute-v3+json'
-          #  }
-          #)
+          request(
+            :method   => 'POST',
+            :expects  => 201,
+            :path     => "/storage/volume/",
+            :body     => Fog::JSON.encode(body_data),
+            :headers  => {
+              'Content-Type' => 'application/oracle-compute-v3+json'
+            }
+          )
       	end
       end
     end
   end
 end
+     
