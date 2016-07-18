@@ -31,6 +31,7 @@ module Fog
 
       request :list_images
       request :get_image
+      request :create_image
 
 			class Real
 
