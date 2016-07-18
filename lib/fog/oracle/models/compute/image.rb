@@ -12,9 +12,19 @@ module Fog
 	      attribute :description
 	      attribute :entries
 
+	      # Only used in create
+	      attribute :default
+
  				def save
           #identity ? update : create
           create
+        end
+
+        def create
+        	requires :name, :description
+          
+          data = service.create_image(name, description,
+                                            :default => default)
         end
 	    end
 	  end

@@ -6,7 +6,7 @@ module Fog
           # Just in case it's already set
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
           body_data     = {
-            'name'             		=> "/Compute-#{@identity_domain}/#{@username}/name",
+            'name'             		=> "/Compute-#{@identity_domain}/#{@username}/#{name}",
             'description'					=> description,
             'default'					   	=> options[:default]
           }
