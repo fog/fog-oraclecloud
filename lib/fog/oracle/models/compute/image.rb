@@ -31,6 +31,11 @@ module Fog
 
         	data = service.update_image(name, :description=>description, :default=>default)
         end
+
+        def delete
+        	requires :name
+        	service.delete_image(name)
+        end
 	    end
 	  end
   end

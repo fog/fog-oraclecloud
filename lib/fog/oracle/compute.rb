@@ -33,6 +33,7 @@ module Fog
       request :get_image
       request :create_image
       request :update_image
+      request :delete_image
 
 			class Real
 
