@@ -12,6 +12,7 @@ module Fog
           data = service.get_image(name, version).body
           new(data)
         end
+
 	    end
 	  end
   end
