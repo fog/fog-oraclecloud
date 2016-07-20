@@ -35,6 +35,7 @@ module Fog
       request :get_image
       request :create_image
       request :delete_image
+      request :list_images
 
       request :list_image_lists
       request :get_image_list

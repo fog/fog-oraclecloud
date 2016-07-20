@@ -21,16 +21,16 @@ module Fog
 	      attribute :error_reason
 	      attribute :image_format
 	      attribute :audited
-	      
+
  				def save
           #identity ? update : create
           create
         end
 
         def create
-        	requires :image_list_name, :version, :attributes, :machineimages
+        	requires :account, :name, :no_upload, :file, :sizes
           
-          data = service.create_image(image_list_name, version, attributes, machineimages)
+          data = service.create_image(account, name, no_upload, file, sizes)
         end
 
         def delete
