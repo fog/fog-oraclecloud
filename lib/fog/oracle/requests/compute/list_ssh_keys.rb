@@ -2,11 +2,11 @@ module Fog
   module Compute
     class Oracle
       class Real
-      	def list_instances
+      	def list_ssh_keys
           response = request(
             :expects => 200,
             :method  => 'GET',
-            :path    => "/instance/Compute-#{@identity_domain}/"
+            :path    => "/sshkey/Compute-#{@identity_domain}/"
           )
           response
         end

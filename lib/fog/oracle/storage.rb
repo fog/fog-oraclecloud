@@ -1,22 +1,26 @@
 module Fog
 	module Storage
 		class Oracle < Fog::Service
-			requires :oracle_username, :oracle_password, :oracle_domain, :oracle_compute_api
+			requires :oracle_username, :oracle_password, :oracle_domain, :oracle_storage_api
 
 			model_path 'fog/oracle/models/storage'
-			collection :volumes
-			model :volume
+			collection :containers
+			model :container
+      collection :objects
+      model :object
 
 			request_path 'fog/oracle/requests/storage'
-			request :list_volumes
-			request :create_volume
+			request :list_containers
+			request :create_container
+      request :get_container
+      request :delete_container
 
 			class Real
       	def initialize(options={})
       		@username = options[:oracle_username]
       		@password = options[:oracle_password]
       		@identity_domain   = options[:oracle_domain]
-      		@api_endpoint   = options[:oracle_compute_api]
+      		@api_endpoint   = options[:oracle_storage_api]
 
           @connection = Fog::XML::Connection.new(@api_endpoint)
 
@@ -28,37 +32,32 @@ module Fog
 
       		begin
             response = @connection.request({
-            	:expects  => 204,
-          	  :method   => 'POST',
-            	:path     => "/authenticate/",
+            	:expects  => 200,
+          	  :method   => 'GET',
+            	:path     => "auth/v1.0",
             	:headers  => {
-            		'Content-Type'	=> 'application/oracle-compute-v3+json'
-            	},
-            	:body			=> Fog::JSON.encode({
-            		'user' 		=> "/Compute-#{@identity_domain}/#{@username}",
-            		'password'=> @password
-            	})
+                'X-Storage-User'  => "Storage-#{@identity_domain}:#{@username}",
+                'X-Storage-Pass' => @password
+            	}
             })
           rescue Excon::Errors::HTTPStatusError => error
             error
           end
-          if response.nil? || !response.headers['Set-Cookie'] then
-          	raise Error.new('Could not authenticate to Compute Cloud Service. Check your athentication details in your config')
+          if response.nil? || !response.headers['X-Auth-Token'] then
+          	raise Error.new('Could not authenticate to Storage Cloud Service. Check your athentication details in your config')
           end
-          @auth_cookie = response.headers['Set-Cookie']
+          @auth_token = response.headers['X-Auth-Token']
       	end
 
       	def request(params, parse_json = true, &block)
 					begin
 						response = @connection.request(params.merge!({
 							:headers  => {
-								'Cookie' => @auth_cookie
+								'X-Auth-Token' => @auth_token
 							}.merge!(params[:headers] || {})
 						}), &block)
 					rescue Excon::Errors::HTTPStatusError => error
 						raise case error
-						when Excon::Errors::NotFound
-							Fog::Oracle::Java::NotFound.slurp(error)
 						when Excon::Errors::Conflict
 							data = Fog::JSON.decode(error.response.body)
 							raise Error.new(data['message'])

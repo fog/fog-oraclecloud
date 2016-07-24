@@ -1,7 +1,7 @@
 require 'fog/core/model'
 
 module Fog
-  module Storage
+  module Compute
   	class Oracle
 	    class Volume < Fog::Model
 	      identity  :name

@@ -1,5 +1,5 @@
 module Fog
-  module Storage
+  module Compute
     class Oracle
       class Real
       	def create_volume(name, size, high_latency = false, options={})

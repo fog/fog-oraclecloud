@@ -22,6 +22,17 @@ module Fog
       model :instance
       collection :instances
 
+      model :ssh_key
+      collection :ssh_keys
+
+      model :object_plan
+      collection :object_plans
+      model :orchestration
+      collection :orchestrations
+
+      model :volume
+      collection :volumes
+
 			request_path 'fog/oracle/requests/compute'
      	request :list_security_applications
      	request :create_security_application
@@ -47,6 +58,24 @@ module Fog
       request :delete_image_list
 
       request :list_instances
+      request :get_instance
+      request :create_instance
+      request :delete_instance
+
+      request :list_ssh_keys
+      request :get_ssh_key
+      request :create_ssh_key
+      request :delete_ssh_key
+      request :update_ssh_key
+
+      request :get_orchestration
+      request :list_orchestrations
+      request :create_orchestration
+      request :update_orchestration
+      request :delete_orchestration
+
+      request :list_volumes
+      request :create_volumes
 
 			class Real
 

@@ -16,7 +16,14 @@ module Fog
   module Oracle
   	extend Fog::Provider
 
+    autoload :Java, File.expand_path('../oracle/java', __FILE__)
+    autoload :Database, File.expand_path('../oracle/database', __FILE__)
+    autoload :SOA, File.expand_path('../oracle/soa', __FILE__)
+
   	service(:compute, 'Compute')
   	service(:storage, 'Storage')
+    service(:java, 'Java')
+    service(:database, 'Database')
+    service(:soa, 'SOA')
   end
 end

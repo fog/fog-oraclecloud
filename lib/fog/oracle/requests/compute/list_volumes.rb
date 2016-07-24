@@ -1,5 +1,5 @@
 module Fog
-  module Storage
+  module Compute
     class Oracle
       class Real
       	def list_volumes

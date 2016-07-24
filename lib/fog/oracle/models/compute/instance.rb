@@ -3,7 +3,7 @@ require 'fog/core/model'
 module Fog
   module Compute
   	class Oracle
-	    class Image < Fog::Model
+	    class Instance < Fog::Model
 	      identity  :name
 
 	      attribute :account
@@ -39,20 +39,25 @@ module Fog
 	      attribute :virtio
 	      attribute :vnc
 	       
+	      def ready?
+	      	state == 'running'
+	      end
+
  				def save
           #identity ? update : create
-        #  create
+          create
         end
 
         def create
-        #	requires :account, :name, :no_upload, :file, :sizes
+        	requires :name, :shape, :imagelist, :label, :sshkeys
           
-         # data = service.create_image(account, name, no_upload, file, sizes)
+          data = service.create_instance(name, shape, imagelist, label, sshkeys)
+          merge_attributes(data.body['instances'][0])
         end
 
-        def delete
-       # 	requires :image_list_name
-        #	service.delete_image(image_list_name, version)
+        def destroy
+        	requires :name
+        	service.delete_instance(name)
         end
 	    end
 	  end

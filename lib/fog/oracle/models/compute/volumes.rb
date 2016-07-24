@@ -1,12 +1,9 @@
-require 'fog/core/collection'
-require 'fog/oracle/models/compute/security_application'
-
 module Fog
-  module Storage
+  module Compute
   	class Oracle
 	    class Volumes < Fog::Collection
 
-	    	model Fog::Storage::Oracle::Volume
+	    	model Fog::Compute::Oracle::Volume
 				
 				def all
 					data = service.list_volumes().body['result']
