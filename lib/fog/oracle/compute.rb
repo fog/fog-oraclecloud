@@ -73,9 +73,11 @@ module Fog
       request :create_orchestration
       request :update_orchestration
       request :delete_orchestration
+      request :start_orchestration
+      request :stop_orchestration
 
       request :list_volumes
-      request :create_volumes
+      request :create_volume
 
 			class Real
 

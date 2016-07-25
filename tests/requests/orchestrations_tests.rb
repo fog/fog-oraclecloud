@@ -40,9 +40,21 @@ Shindo.tests('Fog::Compute[oracle] | orchestration requests', 'orchestrations') 
 			}]
 		}
 		orchestration.save()
+		orchestration.wait_for { ready? }
 		test "can update orchestration" do
 			check = Fog::Compute[:oracle].orchestrations.get(orchestration.name)
 			check.oplans.size == 2
+		end
+
+		orchestration.start()
+		orchestration.wait_for { running? }
+		test "can start" do
+			orchestration.status == 'running'
+		end
+		orchestration.stop()
+		orchestration.wait_for { stopped? }
+		test "can stop" do
+			orchestration.status == 'stopped'
 		end
 
 		orchestration.destroy()
