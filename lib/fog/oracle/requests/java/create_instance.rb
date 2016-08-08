@@ -4,6 +4,10 @@ module Fog
       class Real
 
       	def create_instance(service_name, cloudStorageContainer, cloudStorageUser, cloudStoragePassword, parameters, options={})
+          if !cloudStorageContainer.start_with?("/Storage-") then
+            # They haven't provided a well formed container name, add their details in
+            name = "/Storage-#{@identity_domain}/#{@username}/#{cloudStorageContainer}"
+          end   
           body_data     = {
             'serviceName'             => service_name,
             'cloudStorageContainer'		=> cloudStorageContainer,
