@@ -1,4 +1,4 @@
-# Fog::Oracle
+# Fog::OracleCloud
 
 Module for the 'fog' gem to support the Oracle Cloud (IaaS and PaaS)
 
@@ -7,7 +7,7 @@ Module for the 'fog' gem to support the Oracle Cloud (IaaS and PaaS)
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'fog-oracle'
+gem 'fog-oraclecloud'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install fog-oracle
+    $ gem install fog-oraclecloud
 
 ## Usage
 
