@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
 				def get_instance(name)
           if !name.start_with?("/Compute-") then

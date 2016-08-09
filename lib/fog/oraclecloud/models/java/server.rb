@@ -1,7 +1,7 @@
 require 'fog/compute/models/server'
 
 module Fog
-  module Oracle
+  module OracleCloud
     class Java
       class Server < Fog::Model
       	identity :name

@@ -1,9 +1,9 @@
 module Fog
   module Storage
-    class Oracle
+    class OracleCloud
       class Containers < Fog::Collection
 
-      	model Fog::Storage::Oracle::Container
+      	model Fog::Storage::OracleCloud::Container
 
       	def all
           containers = service.list_containers().body

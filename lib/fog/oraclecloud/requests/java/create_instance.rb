@@ -1,5 +1,5 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class Java
       class Real
 
@@ -38,7 +38,7 @@ module Fog
       	def create_instance(service_name, cloudStorageContainer, cloudStorageUser, cloudStoragePassword, parameters, options={})
       		response = Excon::Response.new
 
-      		instance = Fog::Oracle::Mock.create_java_instance(service_name, parameters)
+      		instance = Fog::OracleCloud::Mock.create_java_instance(service_name, parameters)
           self.data[:instances][service_name] = instance
 
       		response.status = 202

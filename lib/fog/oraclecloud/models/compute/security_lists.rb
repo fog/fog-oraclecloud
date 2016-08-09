@@ -1,12 +1,11 @@
 require 'fog/core/collection'
-require 'fog/oracle/models/compute/security_list'
 
 module Fog
   module Compute
-  	class Oracle
+  	class OracleCloud
 	    class SecurityLists < Fog::Collection
 
-	    	model Fog::Compute::Oracle::SecurityList
+	    	model Fog::Compute::OracleCloud::SecurityList
 				
 				def all
 					data = service.list_security_lists().body['result']

@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def delete_image (name, version)
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''

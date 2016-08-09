@@ -1,6 +1,6 @@
 module Fog
   module Compute
-  	class Oracle
+  	class OracleCloud
 	    class ObjectPlan < Fog::Model
 
 	      attribute :label

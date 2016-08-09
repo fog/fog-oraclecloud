@@ -2,7 +2,7 @@ require 'fog/core/model'
 
 module Fog
   module Compute
-  	class Oracle
+  	class OracleCloud
 	    class SshKey < Fog::Model
 	      identity  :uri
 

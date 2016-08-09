@@ -1,9 +1,9 @@
 module Fog
   module Compute
-  	class Oracle
+  	class OracleCloud
 	    class ObjectPlans < Fog::Collection
 
-	    	model Fog::Compute::Oracle::ObjectPlan
+	    	model Fog::Compute::OracleCloud::ObjectPlan
 				
  			
 	    end

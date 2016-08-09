@@ -1,6 +1,6 @@
 module Fog
   module Storage
-    class Oracle
+    class OracleCloud
       class Object < Fog::Model
         identity  :name
 

@@ -1,7 +1,7 @@
 require 'fog/core/model'
 
 module Fog
-  module Oracle
+  module OracleCloud
     class SOA
       class Instance < Fog::Model
         identity  :service_name

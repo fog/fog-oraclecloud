@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def list_security_lists
           response = request(

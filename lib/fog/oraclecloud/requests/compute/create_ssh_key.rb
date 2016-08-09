@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def create_ssh_key (name, enabled, key)
           # Just in case it's already set

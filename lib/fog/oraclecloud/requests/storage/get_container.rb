@@ -1,6 +1,6 @@
 module Fog
   module Storage
-    class Oracle
+    class OracleCloud
       class Real
       	def get_container(name)
           response = request(

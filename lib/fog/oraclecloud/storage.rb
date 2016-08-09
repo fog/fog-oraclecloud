@@ -1,15 +1,15 @@
 module Fog
 	module Storage
-		class Oracle < Fog::Service
+		class OracleCloud < Fog::Service
 			requires :oracle_username, :oracle_password, :oracle_domain, :oracle_storage_api
 
-			model_path 'fog/oracle/models/storage'
+			model_path 'fog/oraclecloud/models/storage'
 			collection :containers
 			model :container
       collection :objects
       model :object
 
-			request_path 'fog/oracle/requests/storage'
+			request_path 'fog/oraclecloud/requests/storage'
 			request :list_containers
 			request :create_container
       request :get_container

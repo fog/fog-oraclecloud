@@ -1,9 +1,9 @@
 module Fog
   module Compute
-  	class Oracle
+  	class OracleCloud
 	    class Volumes < Fog::Collection
 
-	    	model Fog::Compute::Oracle::Volume
+	    	model Fog::Compute::OracleCloud::Volume
 				
 				def all
 					data = service.list_volumes().body['result']

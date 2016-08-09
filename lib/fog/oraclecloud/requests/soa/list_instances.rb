@@ -1,5 +1,5 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class SOA
       class Real
       	def list_instances

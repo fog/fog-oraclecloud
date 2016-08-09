@@ -1,9 +1,9 @@
 module Fog
 	module Compute
-		class Oracle < Fog::Service
+		class OracleCloud < Fog::Service
 			requires :oracle_username, :oracle_password, :oracle_domain, :oracle_compute_api
 
-      model_path	'fog/oracle/models/compute'
+      model_path	'fog/oraclecloud/models/compute'
     	model :security_application
     	collection :security_applications
 
@@ -33,7 +33,7 @@ module Fog
       model :volume
       collection :volumes
 
-			request_path 'fog/oracle/requests/compute'
+			request_path 'fog/oraclecloud/requests/compute'
      	request :list_security_applications
      	request :create_security_application
      	request :delete_security_application

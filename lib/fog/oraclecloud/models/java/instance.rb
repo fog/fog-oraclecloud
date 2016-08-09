@@ -1,7 +1,7 @@
 require 'fog/core/model'
 
 module Fog
-  module Oracle
+  module OracleCloud
     class Java
       class Instance < Fog::Model
         identity  :service_name, :aliases=>'name'

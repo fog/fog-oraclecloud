@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def create_security_rule(name, src_list, dst_list, application, action, options={})
           body_data     = {

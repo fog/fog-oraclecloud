@@ -1,15 +1,15 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class Java < Fog::Service
       requires :oracle_username, :oracle_password, :oracle_domain, :oracle_region
 
-      model_path	'fog/oracle/models/java'
+      model_path	'fog/oraclecloud/models/java'
       model				:instance
       collection	:instances
       model       :server
       collection  :servers
 
-			request_path 'fog/oracle/requests/java'
+			request_path 'fog/oraclecloud/requests/java'
       request :list_instances
       request :create_instance
       request :get_instance
@@ -44,7 +44,7 @@ module Fog
 					rescue Excon::Errors::HTTPStatusError => error
 						raise case error
 						when Excon::Errors::NotFound
-							Fog::Oracle::Java::NotFound.slurp(error)
+							Fog::OracleCloud::Java::NotFound.slurp(error)
 						else
 							error
 						end

@@ -1,13 +1,13 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class SOA < Fog::Service
       requires :oracle_username, :oracle_password, :oracle_domain, :oracle_region
 
-      model_path	'fog/oracle/models/soa'
+      model_path	'fog/oraclecloud/models/soa'
       model				:instance
       collection	:instances
 
-			request_path 'fog/oracle/requests/soa'
+			request_path 'fog/oraclecloud/requests/soa'
       request :list_instances
       request :create_instance
       request :get_instance
@@ -43,7 +43,7 @@ module Fog
 					rescue Excon::Errors::HTTPStatusError => error
 						raise case error
 						when Excon::Errors::NotFound
-							Fog::Oracle::SOA::NotFound.slurp(error)
+							Fog::OracleCloud::SOA::NotFound.slurp(error)
 						else
 							error
 						end

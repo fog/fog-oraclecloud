@@ -1,5 +1,5 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class Database
       class Real
 

@@ -1,5 +1,5 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class Database
       class Real
 
@@ -34,7 +34,7 @@ module Fog
         def create_instance(service_name, edition, vmPublicKey, parameters, options={})
       		response = Excon::Response.new
 
-      		instance = Fog::Oracle::Mock.create_database_instance(service_name)
+      		instance = Fog::OracleCloud::Mock.create_database_instance(service_name)
           self.data[:instances][service_name] = instance
 
       		response.status = 202

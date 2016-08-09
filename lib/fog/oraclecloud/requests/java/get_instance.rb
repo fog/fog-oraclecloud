@@ -1,5 +1,5 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class Java
       class Real
 
@@ -21,7 +21,7 @@ module Fog
             response.status = 200
             response.body   = self.data[:instances][instance_id]
           else
-            raise Fog::Oracle::Java::NotFound
+            raise Fog::OracleCloud::Java::NotFound
           end
           response
         end

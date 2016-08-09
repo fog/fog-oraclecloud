@@ -1,11 +1,11 @@
 module Fog
   module Storage
-    class Oracle
+    class OracleCloud
       class Objects < Fog::Collection
 
         attribute :container
 
-      	model Fog::Storage::Oracle::Object
+      	model Fog::Storage::OracleCloud::Object
 
       	def all
           requires :container

@@ -1,13 +1,13 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class Database < Fog::Service
       requires :oracle_username, :oracle_password, :oracle_domain, :oracle_region
 
-      model_path	'fog/oracle/models/database'
+      model_path	'fog/oraclecloud/models/database'
       model				:instance
       collection	:instances
 
-			request_path 'fog/oracle/requests/database'
+			request_path 'fog/oraclecloud/requests/database'
       request :list_instances
       request :get_instance
       request :create_instance
@@ -95,7 +95,7 @@ module Fog
           rescue Excon::Errors::HTTPStatusError => error
             raise case error
             when Excon::Errors::NotFound
-              Fog::Oracle::Database::NotFound.slurp(error)
+              Fog::OracleCloud::Database::NotFound.slurp(error)
             else
               error
             end

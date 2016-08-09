@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def create_image_list (name, description, options={})
           # Just in case it's already set

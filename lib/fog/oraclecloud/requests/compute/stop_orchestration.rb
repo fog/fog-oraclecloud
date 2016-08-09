@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def stop_orchestration (name)
           if !name.start_with?("/Compute-") then

@@ -1,5 +1,5 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class SOA
       class Real
 
@@ -20,7 +20,7 @@ module Fog
             response.status = 200
             response.body   = self.data[:instances][instance_id]
           else
-            raise Fog::Oracle::SOA::NotFound
+            raise Fog::OracleCloud::SOA::NotFound
           end
           response
         end

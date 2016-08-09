@@ -1,12 +1,11 @@
 require 'fog/core/collection'
-require 'fog/oracle/models/compute/image'
 
 module Fog
   module Compute
-  	class Oracle
+  	class OracleCloud
 	    class SshKeys < Fog::Collection
 
-	    	model Fog::Compute::Oracle::SshKey
+	    	model Fog::Compute::OracleCloud::SshKey
 				
  				def get(name)
           data = service.get_ssh_key(name).body

@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def create_image (account, name, no_upload, file, sizes)
           # Just in case it's already set

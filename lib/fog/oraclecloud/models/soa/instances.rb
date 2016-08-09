@@ -1,12 +1,11 @@
 require 'fog/core/collection'
-require 'fog/oracle/models/soa/instance'
 
 module Fog
-  module Oracle
+  module OracleCloud
     class SOA
       class Instances < Fog::Collection
 
-      	model Fog::Oracle::SOA::Instance
+      	model Fog::OracleCloud::SOA::Instance
 
       	def all
           data = service.list_instances().body['services']
@@ -16,7 +15,7 @@ module Fog
         def get(id)
           begin
             new(service.get_instance(id).body)
-          rescue Fog::Oracle::SOA::NotFound
+          rescue Fog::OracleCloud::SOA::NotFound
             nil
           end
         end

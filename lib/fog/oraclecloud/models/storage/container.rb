@@ -1,6 +1,6 @@
 module Fog
   module Storage
-    class Oracle
+    class OracleCloud
       class Container < Fog::Model
         identity  :name
 
@@ -13,7 +13,7 @@ module Fog
         attribute :createdTimestamp, :aliases => 'X-Timestamp'
 
         def objects
-          @objects ||= Fog::Storage::Oracle::Objects.new(:container=>self, :service=>service)
+          @objects ||= Fog::Storage::OracleCloud::Objects.new(:container=>self, :service=>service)
         end
 
         def save

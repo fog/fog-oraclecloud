@@ -1,12 +1,11 @@
 require 'fog/core/collection'
-require 'fog/oracle/models/java/instance'
 
 module Fog
-  module Oracle
+  module OracleCloud
     class Java
       class Instances < Fog::Collection
 
-      	model Fog::Oracle::Java::Instance
+      	model Fog::OracleCloud::Java::Instance
 
       	def all
           data = service.list_instances().body['services']
@@ -16,7 +15,7 @@ module Fog
         def get(service_name)
         	begin
             new(service.get_instance(service_name).body)
-          rescue Fog::Oracle::Java::NotFound
+          rescue Fog::OracleCloud::Java::NotFound
             nil
           end
         end

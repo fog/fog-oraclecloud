@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def create_security_application(name, protocol, options={})
           body_data     = {

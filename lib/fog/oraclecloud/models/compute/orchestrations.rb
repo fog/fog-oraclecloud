@@ -1,9 +1,9 @@
 module Fog
   module Compute
-  	class Oracle
+  	class OracleCloud
 	    class Orchestrations < Fog::Collection
 
-	    	model Fog::Compute::Oracle::Orchestration
+	    	model Fog::Compute::OracleCloud::Orchestration
 				
  				def get(name)
           data = service.get_orchestration(name).body

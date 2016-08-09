@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
 				def get_image_list(name)
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''

@@ -1,12 +1,11 @@
 require 'fog/core/collection'
-require 'fog/oracle/models/compute/image'
 
 module Fog
   module Compute
-  	class Oracle
+  	class OracleCloud
 	    class Instances < Fog::Collection
 
-	    	model Fog::Compute::Oracle::Instance
+	    	model Fog::Compute::OracleCloud::Instance
 				
  				def get(name)
           data = service.get_instance(name).body

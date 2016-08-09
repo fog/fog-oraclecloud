@@ -1,5 +1,5 @@
 module Fog
-  module Oracle
+  module OracleCloud
     class Java
       class Real
       	def list_servers(service_name)

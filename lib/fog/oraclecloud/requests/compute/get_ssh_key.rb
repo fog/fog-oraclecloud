@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
         def get_ssh_key(name)
           if !name.start_with?("/Compute-") then

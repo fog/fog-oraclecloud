@@ -1,6 +1,6 @@
 module Fog
   module Compute
-    class Oracle
+    class OracleCloud
       class Real
       	def create_volume(name, size, high_latency = false, options={})
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", '' # Just in case it's already set
