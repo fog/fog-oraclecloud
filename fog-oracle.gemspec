@@ -1,7 +1,7 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'fog/oracle/version'
+require 'fog/oraclecloud/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "fog-oraclecloud"
@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Module for the 'fog' gem to support Oracle Cloud Services.}
   spec.description   = %q{This library can be used as a module for `fog` or as standalone provider to use the Oracle Cloud Service in applications.}
-  spec.homepage      = "http://github.com/Joelith/fog-oracle"
+  spec.homepage      = "http://github.com/Joelith/fog-oraclecloud"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
