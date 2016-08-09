@@ -1,6 +1,6 @@
 require 'pp'
 
-Shindo.tests('Fog::Soa[oracle] | SOA requests', 'soa') do
+Shindo.tests('Fog::Soa[oraclecloud] | SOA requests', 'soa') do
 	
 	#tests("#java-create", "create") do
 	#	sshkey = Fog::Compute[:oracle].ssh_keys.first.name
@@ -31,7 +31,7 @@ Shindo.tests('Fog::Soa[oracle] | SOA requests', 'soa') do
 	#end
 
 	tests('#soa-read') do
-		instances = Fog::Oracle[:soa].instances
+		instances = Fog::OracleCloud[:soa].instances
 		test "returns an Array" do
 			instances.is_a? Array
 		end
@@ -44,7 +44,7 @@ Shindo.tests('Fog::Soa[oracle] | SOA requests', 'soa') do
 			instances.first.service_name.is_a? String
 		end
 
-		instance = Fog::Oracle[:soa].instances.get(instances.first.service_name)
+		instance = Fog::OracleCloud[:soa].instances.get(instances.first.service_name)
 		test "should return an instance" do
 			instance.service_name.is_a? String
 		end

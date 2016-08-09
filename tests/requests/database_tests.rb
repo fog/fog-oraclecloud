@@ -1,6 +1,6 @@
 require 'pp'
 
-Shindo.tests('Fog::Database[oracle] | database requests', 'database') do
+Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 	
 	#tests("#java-create", "create") do
 	#	sshkey = Fog::Compute[:oracle].ssh_keys.first.name
@@ -31,7 +31,7 @@ Shindo.tests('Fog::Database[oracle] | database requests', 'database') do
 	#end
 
 	tests('#database-read') do
-		instances = Fog::Oracle[:database].instances
+		instances = Fog::OracleCloud[:database].instances
 		test "returns an Array" do
 			instances.is_a? Array
 		end
@@ -44,7 +44,7 @@ Shindo.tests('Fog::Database[oracle] | database requests', 'database') do
 			instances.first.service_name.is_a? String
 		end
 
-		instance = Fog::Oracle[:database].instances.get(instances.first.service_name)
+		instance = Fog::OracleCloud[:database].instances.get(instances.first.service_name)
 		test "should return an instance" do
 			instance.service_name.is_a? String
 		end

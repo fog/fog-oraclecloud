@@ -1,1 +1,1 @@
-require File.expand_path('../../lib/fog/oracle', __FILE__)
+require File.expand_path('../../lib/fog/oraclecloud', __FILE__)

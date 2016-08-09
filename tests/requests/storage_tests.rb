@@ -1,15 +1,15 @@
-Shindo.tests('Fog::Storage[oracle] | storage requests', 'storage') do
+Shindo.tests('Fog::Storage[oraclecloud] | storage requests', 'storage') do
 
 	tests("#storage-create", "create") do
-		container = Fog::Storage[:oracle].containers.create(
+		container = Fog::Storage[:oraclecloud].containers.create(
 			:name 		=> 'TestContainer1',
 		)
 		test "can create a storage container" do
-			container.is_a? Fog::Storage::Oracle::Container
+			container.is_a? Fog::Storage::OracleCloud::Container
 			container.name.is_a? String
 		end
 
-		check = Fog::Storage[:oracle].containers.get(container.name)
+		check = Fog::Storage[:oraclecloud].containers.get(container.name)
 		test "can get container" do
 			check.name == container.name
 		end
@@ -23,7 +23,7 @@ Shindo.tests('Fog::Storage[oracle] | storage requests', 'storage') do
 	end
 
 	tests("#storage-read") do
-		containers = Fog::Storage[:oracle].containers
+		containers = Fog::Storage[:oraclecloud].containers
 		test "returns an Array" do
 			containers.is_a? Array
 		end
@@ -33,14 +33,14 @@ Shindo.tests('Fog::Storage[oracle] | storage requests', 'storage') do
 		test "should return a valid name" do
 			containers.first.name.is_a? String
 		end
-		container = Fog::Storage[:oracle].containers.get(containers.first.name)
+		container = Fog::Storage[:oraclecloud].containers.get(containers.first.name)
 		test "should return a key" do
 			container.name.is_a? String
 		end
 	end
 
 	tests("#object-read") do
-		objects = Fog::Storage[:oracle].containers[5].objects
+		objects = Fog::Storage[:oraclecloud].containers[5].objects
 		test "returns an Array" do
 			objects.is_a? Array
 		end

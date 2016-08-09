@@ -1,10 +1,10 @@
 require 'pp'
 
-Shindo.tests('Fog::Compute[oracle] | instance requests', 'instances') do
+Shindo.tests('Fog::Compute[oraclecloud] | instance requests', 'instances') do
 	
 	tests("#instance-create", "create") do
-		sshkey = Fog::Compute[:oracle].ssh_keys.first.name
-		new_instance = Fog::Compute[:oracle].instances.create(
+		sshkey = Fog::Compute[:oraclecloud].ssh_keys.first.name
+		new_instance = Fog::Compute[:oraclecloud].instances.create(
 			:name=>'Test123', 
 			:shape=>'oc3', 
 			:imagelist=>'/oracle/public/oel_6.4_2GB_v1',
@@ -25,13 +25,13 @@ Shindo.tests('Fog::Compute[oracle] | instance requests', 'instances') do
 
 		new_instance.destroy()
 		test "can delete instance" do
-			check = Fog::Compute[:oracle].instances.get(new_instance.name)
+			check = Fog::Compute[:oraclecloud].instances.get(new_instance.name)
 			check.state == 'stopping'
 		end
 	end
 
 	tests('#instances-read') do
-		instances = Fog::Compute[:oracle].instances
+		instances = Fog::Compute[:oraclecloud].instances
 		test "returns an Array" do
 			instances.is_a? Array
 		end
@@ -46,7 +46,7 @@ Shindo.tests('Fog::Compute[oracle] | instance requests', 'instances') do
 			instances.first.name.is_a? String
 		end
 
-		instance = Fog::Compute[:oracle].instances.get(instances.first.name)
+		instance = Fog::Compute[:oraclecloud].instances.get(instances.first.name)
 		test "should return an instance" do
 			instance.name.is_a? String
 		end

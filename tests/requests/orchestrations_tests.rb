@@ -1,9 +1,9 @@
 require 'pp'
 
-Shindo.tests('Fog::Compute[oracle] | orchestration requests', 'orchestrations') do
+Shindo.tests('Fog::Compute[oraclecloud] | orchestration requests', 'orchestrations') do
 	
 	tests("#orchestrations-create", "create") do
-		orchestration = Fog::Compute[:oracle].orchestrations.create(
+		orchestration = Fog::Compute[:oraclecloud].orchestrations.create(
 			:name => "OrchestrationTest-#{rand(100)}",
 			:oplans => [{
 				'label' =>"WebServer",
@@ -19,10 +19,10 @@ Shindo.tests('Fog::Compute[oracle] | orchestration requests', 'orchestrations') 
 			}]
 		)
 		test "can create an orchestration" do
-			orchestration.is_a? Fog::Compute::Oracle::Orchestration
+			orchestration.is_a? Fog::Compute::OracleCloud::Orchestration
 		end
 
-		check = Fog::Compute[:oracle].orchestrations.get(orchestration.name)
+		check = Fog::Compute[:oraclecloud].orchestrations.get(orchestration.name)
 		test "can get created orchestration" do
 			check.uri == orchestration.uri
 		end
@@ -42,7 +42,7 @@ Shindo.tests('Fog::Compute[oracle] | orchestration requests', 'orchestrations') 
 		orchestration.save()
 		orchestration.wait_for { ready? }
 		test "can update orchestration" do
-			check = Fog::Compute[:oracle].orchestrations.get(orchestration.name)
+			check = Fog::Compute[:oraclecloud].orchestrations.get(orchestration.name)
 			check.oplans.size == 2
 		end
 
@@ -59,12 +59,12 @@ Shindo.tests('Fog::Compute[oracle] | orchestration requests', 'orchestrations') 
 
 		orchestration.destroy()
 		tests("can delete orchestration").raises(Excon::Error::NotFound) do
-			check = Fog::Compute[:oracle].orchestrations.get(orchestration.name)
+			check = Fog::Compute[:oraclecloud].orchestrations.get(orchestration.name)
 		end
 	end
 
 	tests("#orchestrations-read") do
-		orchestrations = Fog::Compute[:oracle].orchestrations
+		orchestrations = Fog::Compute[:oraclecloud].orchestrations
 		test "returns an Array" do
 			orchestrations.is_a? Array
 		end
@@ -78,7 +78,7 @@ Shindo.tests('Fog::Compute[oracle] | orchestration requests', 'orchestrations') 
 			orchestrations.first.name.is_a? String
 		end
 
-		orchestrations = Fog::Compute[:oracle].orchestrations.get(orchestrations.first.name)
+		orchestrations = Fog::Compute[:oraclecloud].orchestrations.get(orchestrations.first.name)
 		test "should return a key" do
 			orchestrations.name.is_a? String
 		end
