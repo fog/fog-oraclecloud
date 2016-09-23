@@ -5,7 +5,7 @@ require 'fog/oraclecloud/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "fog-oraclecloud"
-  spec.version       = Fog::Oracle::VERSION
+  spec.version       = Fog::OracleCloud::VERSION
   spec.authors       = ["Joel Nation"]
   spec.email         = ["joel.nation@oracle.com"]
 

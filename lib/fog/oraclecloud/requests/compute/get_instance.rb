@@ -19,6 +19,26 @@ module Fog
           response
         end
       end
+
+      class Mock
+        def get_instance(name)
+          response = Excon::Response.new
+          name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
+
+          if instance = self.data[:instances][name] 
+            if instance['state'] == 'stopping'
+              self.data[:instances].delete(name)
+              raise Fog::Compute::OracleCloud::NotFound.new("Instance #{name} does not exist");
+            else;
+              response.status = 200
+              response.body = instance
+              response
+            end
+          else;
+            raise Fog::Compute::OracleCloud::NotFound.new("Instance #{name} does not exist");
+          end
+        end
+      end
     end
   end
 end

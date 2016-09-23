@@ -19,6 +19,20 @@ module Fog
           response
         end
       end
+
+      class Mock
+        def get_ssh_key(name)
+          response = Excon::Response.new
+
+          if sshkey = self.data[:sshkeys][name] 
+            response.status = 200
+            response.body = sshkey
+            response
+          else;
+            raise Fog::Compute::OracleCloud::NotFound.new('SSHKey does not exist');
+          end
+        end
+      end
     end
   end
 end

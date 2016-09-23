@@ -27,6 +27,28 @@ module Fog
           )
       	end
       end
+
+      class Mock
+        def create_instance (name, shape, imagelist, label, sshkeys)
+          response = Excon::Response.new
+          name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
+
+          self.data[:instances][name] = {
+            'name' => "/Compute-#{@identity_domain}/#{@username}/#{name}",
+            'shape' => shape,
+            'imagelist' => imagelist,
+            'label' => label,
+            'sshkeys' => sshkeys,
+            'state' => 'running'
+          }
+          pp self.data[:instances]
+          response.status = 201
+          response.body = {
+            'instances' => [self.data[:instances][name]]
+          }
+          response
+        end
+      end
     end
   end
 end

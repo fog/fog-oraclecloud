@@ -22,6 +22,25 @@ module Fog
           )
       	end
       end
+
+      class Mock
+        def create_ssh_key (name, enabled, key)
+          response = Excon::Response.new
+          name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
+
+          data = {
+            'name' => "/Compute-#{@identity_domain}/#{@username}/#{name}",
+            'enabled' => enabled,
+            'key' => key,
+            'uri' => "#{@api_endpoint}sshkey/#{name}"
+          }
+          self.data[:sshkeys][name] = data
+
+          response.status = 201
+          response.body = self.data[:sshkeys][name]
+          response
+        end
+      end
     end
   end
 end

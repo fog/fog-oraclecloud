@@ -94,7 +94,6 @@ module Fog
       	end
 
       	def authenticate()
-
       		begin
             response = @connection.request({
             	:expects  => 204,
@@ -139,6 +138,31 @@ module Fog
             response.body = Fog::JSON.decode(response.body)
           end
           response
+        end
+      end
+
+      class Mock
+        def initialize(options={})
+          @username = options[:oracle_username]
+          @password = options[:oracle_password]
+          @identity_domain   = options[:oracle_domain]
+          @api_endpoint   = options[:oracle_compute_api]
+
+        end
+
+        def self.data 
+          @data ||= {
+            :instances => {},
+            :sshkeys => {}
+          }
+        end
+
+        def self.reset
+          @data = nil
+        end
+
+        def data 
+          self.class.data
         end
       end
     end

@@ -11,6 +11,18 @@ module Fog
           response
         end
       end
+      class Mock
+        def list_instances
+          response = Excon::Response.new
+
+          instances = self.data[:instances].values
+
+          response.body = {
+            'result' => instances
+          }
+          response
+        end
+      end
     end
   end
 end
