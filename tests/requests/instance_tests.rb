@@ -24,12 +24,6 @@ Shindo.tests('Fog::Compute[oraclecloud] | instance requests', 'instances') do
 		test "can create an instance" do
 			new_instance.is_a? Fog::Compute::OracleCloud::Instance
 		end
-		if !Fog.mocking? 
-			# Mocked instances are automatically 'running'
-			test "is being built" do
-				new_instance.state != "running"
-			end
-		end
 		new_instance.wait_for { ready? }
 
 		test "is built" do
@@ -43,7 +37,7 @@ Shindo.tests('Fog::Compute[oraclecloud] | instance requests', 'instances') do
 			instances.is_a? Array
 		end
 		instances.each do |ins|
-			puts "#{ins.name} - #{ins.state}"
+			puts "#{ins.clean_name} - #{ins.state}"
 		end
 		test "should return records" do
 			instances.size >= 1
@@ -59,9 +53,12 @@ Shindo.tests('Fog::Compute[oraclecloud] | instance requests', 'instances') do
 		end
 	end
 
-	tests("#instance-delete", "create").raises(Fog::Compute::OracleCloud::NotFound)do
-		check = Fog::Compute[:oraclecloud].instances.get('Test123')
-		check.destroy()
-		check.wait_for { state == 'stopped' } 
+	tests("#instance-delete", "create") do
+		instance = Fog::Compute[:oraclecloud].instances.get('Test123')
+		instance.destroy()
+		instance.wait_for { state == 'stopping' }
+		tests("should actually delete instance").raises(Fog::Compute::OracleCloud::NotFound) do
+			instance.wait_for { state == 'stopped' } 
+		end
 	end
 end

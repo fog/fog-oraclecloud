@@ -153,7 +153,8 @@ module Fog
         def self.data 
           @data ||= {
             :instances => {},
-            :sshkeys => {}
+            :sshkeys => {},
+            :deleted_at => {}
           }
         end
 

@@ -37,10 +37,14 @@ module Fog
 	      attribute :uri
 	      attribute :vcable_id
 	      attribute :virtio
-	      attribute :vnc
-	       
+	      attribute :vnc 
+
 	      def ready?
 	      	state == 'running'
+	      end
+
+	      def clean_name 
+	      	name.sub %r{\/.*\/}, ''
 	      end
 
  				def save

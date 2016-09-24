@@ -41,7 +41,6 @@ module Fog
             'sshkeys' => sshkeys,
             'state' => 'running'
           }
-          pp self.data[:instances]
           response.status = 201
           response.body = {
             'instances' => [self.data[:instances][name]]

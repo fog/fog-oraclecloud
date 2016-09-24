@@ -23,17 +23,18 @@ module Fog
       class Mock
         def get_instance(name)
           response = Excon::Response.new
-          name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
+          clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
 
-          if instance = self.data[:instances][name] 
+          if instance = self.data[:instances][clean_name] 
             if instance['state'] == 'stopping'
-              self.data[:instances].delete(name)
-              raise Fog::Compute::OracleCloud::NotFound.new("Instance #{name} does not exist");
-            else;
-              response.status = 200
-              response.body = instance
-              response
+              if Time.now - self.data[:deleted_at][clean_name] >= Fog::Mock.delay
+                self.data[:deleted_at].delete(clean_name)
+                self.data[:instances].delete(clean_name)
+              end
             end
+            response.status = 200
+            response.body = instance
+            response
           else;
             raise Fog::Compute::OracleCloud::NotFound.new("Instance #{name} does not exist");
           end

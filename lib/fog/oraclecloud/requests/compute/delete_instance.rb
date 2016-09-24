@@ -21,8 +21,9 @@ module Fog
       class Mock
         def delete_instance(name)
           response = Excon::Response.new
-          name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
-          self.data[:instances][name]['state'] = 'stopping'
+          clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
+          self.data[:instances][clean_name]['state'] = 'stopping'
+          self.data[:deleted_at][clean_name] = Time.now
           response.status = 204
           response
         end
