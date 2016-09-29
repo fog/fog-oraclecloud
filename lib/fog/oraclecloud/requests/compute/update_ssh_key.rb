@@ -24,6 +24,26 @@ module Fog
           )
       	end
       end
+
+      class Mock
+        def update_ssh_key (name, enabled, key)
+          response = Excon::Response.new
+          clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
+          if sshkey = self.data[:sshkeys][clean_name] 
+            self.data[:sshkeys][clean_name].merge!({
+              'name' => "/Compute-#{@identity_domain}/#{@username}/#{clean_name}",
+              'enabled' => enabled,
+              'key' => key,
+              'uri' => "#{@api_endpoint}sshkey/#{clean_name}"              
+            })
+            response.status = 200
+            response.body = self.data[:sshkeys][clean_name]
+            response
+          else;
+            raise Fog::Compute::OracleCloud::NotFound.new("SSHKey #{name} does not exist");
+          end
+        end
+      end
     end
   end
 end

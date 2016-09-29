@@ -3,7 +3,7 @@ module Fog
     class Java
       class Real
 
-      	def create_instance(service_name, cloudStorageContainer, cloudStorageUser, cloudStoragePassword, parameters, options={})
+        def create_instance(service_name, cloudStorageContainer, cloudStorageUser, cloudStoragePassword, dbaName, dbaPassword, dbServiceName, shape, version, vmPublicKey, options={})
           if !cloudStorageContainer.start_with?("/Storage-") then
             # They haven't provided a well formed container name, add their details in
             name = "/Storage-#{@identity_domain}/#{@username}/#{cloudStorageContainer}"
@@ -33,18 +33,23 @@ module Fog
         end
 
       end
-
       class Mock
-      	def create_instance(service_name, cloudStorageContainer, cloudStorageUser, cloudStoragePassword, parameters, options={})
-      		response = Excon::Response.new
+        def create_instance(service_name, cloudStorageContainer, cloudStorageUser, cloudStoragePassword, dbaName, dbaPassword, dbServiceName, shape, version, vmPublicKey, options={})
+          response = Excon::Response.new
 
-      		instance = Fog::OracleCloud::Mock.create_java_instance(service_name, parameters)
-          self.data[:instances][service_name] = instance
+          data = {
+            'service_name' => service_name,
+            'db_service_name' => dbServiceName,
+            'shape' => shape,
+            'version' => version,
+            'status' => 'In Progress'
+          }.merge(options.select {|key, value| ["description"].include?(key) })
 
-      		response.status = 202
-          response.headers['Location'] =  "https://jaas.oraclecloud.com/paas/service/jcs/api/v1.1/instances/agriculture/status/create/job/2781084"
+          self.data[:instances][service_name] = data
+          self.data[:created_at][service_name] = Time.now
+          response.status = 202
           response
-      	end
+        end
       end
     end
   end

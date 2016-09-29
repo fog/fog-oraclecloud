@@ -57,6 +57,7 @@ module Fog
         attribute :cloud_storage_user,        :aliases=>'cloudStorageUser'
         attribute :cloud_storage_password,    :aliases=>'cloudStoragePassword'
         attribute :admin_user_name,           :aliases=>'adminUserName'
+        attribute :vm_public_key,             :aliases=>'vmPublicKey'
 
         # The following are used to delete an instance and are not returned in the list action
         attribute :dba_name
@@ -80,6 +81,14 @@ module Fog
           status == "Running"
         end
 
+        def stopping?
+          status == 'Maintenance' || status == 'Terminating'
+        end
+
+        def stopped?
+          status == 'Stopped'
+        end
+
         def servers
           service.servers.all(service_name)
         end
@@ -92,11 +101,11 @@ module Fog
         private
 
         def create
-        	requires :service_name, :cloudStorageContainer, :cloudStorageUser, :cloudStoragePassword, :parameters 
+        	requires :service_name, :cloud_storage_container, :cloud_storage_user, :cloud_storage_password 
           
-          data = service.create_instance(service_name, cloudStorageContainer, cloudStorageUser, cloudStoragePassword, parameters,
+          data = service.create_instance(service_name, cloud_storage_container, cloud_storage_user, cloud_storage_password, dba_name, dba_password, db_servicename, shape, version, vm_public_key,
                                             :level => level,
-                                            :subscriptionType => subscriptionType,
+                                            :subscriptionType => subscription_type,
                                             :description => description)
 
         end

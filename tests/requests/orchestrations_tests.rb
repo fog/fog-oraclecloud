@@ -18,6 +18,7 @@ Shindo.tests('Fog::Compute[oraclecloud] | orchestration requests', 'orchestratio
 				}]
 			}]
 		)
+		
 		test "can create an orchestration" do
 			orchestration.is_a? Fog::Compute::OracleCloud::Orchestration
 		end

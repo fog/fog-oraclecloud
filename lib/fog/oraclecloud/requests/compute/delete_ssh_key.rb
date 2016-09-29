@@ -17,6 +17,16 @@ module Fog
           )
       	end
       end
+
+      class Mock
+        def delete_ssh_key (name)
+          response = Excon::Response.new
+          clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
+          self.data[:sshkeys].delete(clean_name)
+          response.status = 204
+          response
+        end
+      end
     end
   end
 end

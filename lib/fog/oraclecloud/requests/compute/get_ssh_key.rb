@@ -23,13 +23,14 @@ module Fog
       class Mock
         def get_ssh_key(name)
           response = Excon::Response.new
+          clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
 
-          if sshkey = self.data[:sshkeys][name] 
+          if sshkey = self.data[:sshkeys][clean_name] 
             response.status = 200
             response.body = sshkey
             response
           else;
-            raise Fog::Compute::OracleCloud::NotFound.new('SSHKey does not exist');
+            raise Fog::Compute::OracleCloud::NotFound.new("SSHKey #{name} does not exist");
           end
         end
       end

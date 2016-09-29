@@ -6,7 +6,6 @@ module Fog
       class Instance < Fog::Model
         identity  :service_name
 
-        attribute :service_name,                 :aliases => 'display_name'
         attribute :version
         attribute :status
         attribute :description
@@ -40,11 +39,12 @@ module Fog
         attribute :compute_site_name
 
         # The following are only used to create an instance and are not returned in the list action
-        attribute :level
-        attribute :subscriptionType
         attribute :vmPublicKey
         attribute :parameters
 
+        def clean_name 
+          name.sub %r{\/.*\/}, ''
+        end
 
          def save
           #identity ? update : create
@@ -53,6 +53,14 @@ module Fog
 
         def ready?
           status == "Running"
+        end
+
+        def stopping?
+          status == 'Maintenance' || status == 'Terminating'
+        end
+
+        def stopped?
+          status == 'Stopped'
         end
 
         def ip_address
@@ -68,14 +76,12 @@ module Fog
         private
 
         def create
-          requires :service_name, :edition, :vmPublicKey, :parameters 
-          data = service.create_instance(service_name, edition, vmPublicKey, parameters,
+          requires :service_name, :edition, :vmPublicKey, :shape, :version 
+          data = service.create_instance(service_name, edition, vmPublicKey, shape, version,
                                             :level => level,
                                             :subscriptionType => subscriptionType,
                                             :description => description,
-                                            :version => version,
-                                            :edition => edition,
-                                            :shape => shape)
+                                            :edition => edition)
 
         end
       end

@@ -12,17 +12,12 @@ module Fog
         end
       end
 
-      class Mock
-        def delete_instance(service_name)
+     class Mock
+        def delete_instance(name)
           response = Excon::Response.new
-            # remove from memoreeeez.
-          self.data[:instances].delete service_name
-          response.body = { 
-            'service_name' => service_name,
-            'status' => 'Terminating' 
-          }
-          response.status = 202
-      
+          self.data[:instances][name]['status'] = 'Terminating'
+          self.data[:deleted_at][name] = Time.now
+          response.status = 204
           response
         end
       end

@@ -154,6 +154,7 @@ module Fog
           @data ||= {
             :instances => {},
             :sshkeys => {},
+            :orchestrations => {},
             :deleted_at => {}
           }
         end

@@ -3,7 +3,7 @@ module Fog
     class Database
       class Real
 
-      	def create_instance(service_name, edition, vmPublicKey, parameters, options={})
+      	def create_instance(service_name, edition, vmPublicKey, shape, version, options={})
           body_data     = {
             'serviceName'             => service_name,
             'version'                 => options[:version],
@@ -13,7 +13,10 @@ module Fog
             'description'							=> options[:description],
             'shape'                   => options[:shape],
             'vmPublicKeyText'         => vmPublicKey,
-            'parameters'              => parameters
+            'parameters'              => {
+              'shape'                   => shape,
+              'version'                 => version
+            }
           }
           body_data = body_data.reject {|key, value| value.nil?}
         
@@ -31,13 +34,20 @@ module Fog
       end
 
       class Mock
-        def create_instance(service_name, edition, vmPublicKey, parameters, options={})
+        def create_instance(service_name, edition, vmPublicKey, shape, version, options={})
       		response = Excon::Response.new
 
-      		instance = Fog::OracleCloud::Mock.create_database_instance(service_name)
-          self.data[:instances][service_name] = instance
+          data = {
+            'service_name' => service_name,
+            'shape' => shape,
+            'edition' => edition,
+            'version' => version,
+            'status' => 'In Progress'
+          }.merge(options.select {|key, value| ["description"].include?(key) })
 
-      		response.status = 202
+          self.data[:instances][service_name] = data
+          self.data[:created_at][service_name] = Time.now
+          response.status = 202
           response
       	end
       end

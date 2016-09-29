@@ -41,6 +41,42 @@ module Fog
           )
       	end
       end
+
+      class Mock
+        def create_orchestration (name, oplans, options={})
+          response = Excon::Response.new
+          # Clean up names in case they haven't provided the fully resolved names
+          name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
+          oplans.map do |oplan|
+            oplan['objects'].map do |object|
+              if oplan['obj_type'] == 'launchplan' then
+                object['instances'].map do |instance|
+                  if !instance['name'].start_with?("/Compute-") then
+                    instance['name'] = "/Compute-#{@identity_domain}/#{@username}/#{instance['name']}"
+                  end
+                end
+              else
+                if !object['name'].start_with?("/Compute-") then
+                  object['name'] = "/Compute-#{@identity_domain}/#{@username}/#{object['name']}"
+                end
+              end
+            end
+          end
+          self.data[:orchestrations][name] = {
+            'name'          => "/Compute-#{@identity_domain}/#{@username}/#{name}",
+            'oplans'        => oplans,
+            'relationships' => options[:relationships],
+            'description'   => options[:description],
+            'account'       => options[:account],
+            'schedule'      => options[:schedule],
+            'status'        => 'stopped',
+            'uri'           => "#{@api_endpoint}orchestration/Compute-#{@identity_domain}/#{@username}/#{name}"
+          }
+          response.status = 201
+          response.body = self.data[:orchestrations][name]
+          response
+        end
+      end
     end
   end
 end

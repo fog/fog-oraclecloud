@@ -23,10 +23,7 @@ Shindo.tests('Fog::Compute[oraclecloud] | ssh_keys requests', 'ssh_keys') do
 			check = Fog::Compute[:oraclecloud].ssh_keys.get(sshkey.name)
 			check.enabled == true
 		end
-		sshkey.destroy()
-		tests("can delete ssh key").raises(Excon::Error::NotFound) do
-			check = Fog::Compute[:oraclecloud].ssh_keys.get(sshkey.name)
-		end
+		
 	end
 
 	tests("#sshkeys-read") do
@@ -44,6 +41,14 @@ Shindo.tests('Fog::Compute[oraclecloud] | ssh_keys requests', 'ssh_keys') do
 		sshkey = Fog::Compute[:oraclecloud].ssh_keys.get(sshkeys.first.name)
 		test "should return a key" do
 			sshkey.name.is_a? String
+		end
+	end
+
+	tests("#sshkeys-delete", "create") do
+		sshkey = Fog::Compute[:oraclecloud].ssh_keys.get('TestSSHKey2')
+		sshkey.destroy()
+		tests("should delete key").raises(Fog::Compute::OracleCloud::NotFound) do
+			sshkey = Fog::Compute[:oraclecloud].ssh_keys.get('TestSSHKey2')
 		end
 	end
 end

@@ -13,11 +13,7 @@ module Fog
         end
 
         def get(service_name)
-        	begin
-            new(service.get_instance(service_name).body)
-          rescue Fog::OracleCloud::Java::NotFound
-            nil
-          end
+          new(service.get_instance(service_name).body)
         end
 
       end

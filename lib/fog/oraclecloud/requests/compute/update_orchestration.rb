@@ -44,6 +44,37 @@ module Fog
           )
       	end
       end
+
+      class Mock
+        def update_orchestration (name, oplans, options={})
+          response = Excon::Response.new
+          clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
+          if orchestration = self.data[:orchestrations][clean_name] 
+            oplans.map do |oplan|
+              oplan['objects'].map do |object|
+                if oplan['obj_type'] == 'launchplan' then
+                  object['instances'].map do |instance|
+                    if !instance['name'].start_with?("/Compute-") then
+                      instance['name'] = "/Compute-#{@identity_domain}/#{@username}/#{instance['name']}"
+                    end
+                  end
+                else
+                  if !object['name'].start_with?("/Compute-") then
+                    object['name'] = "/Compute-#{@identity_domain}/#{@username}/#{object['name']}"
+                  end
+                end
+              end
+            end
+            self.data[:orchestrations][clean_name].merge!(options)
+            self.data[:orchestrations][clean_name]['oplans'] = oplans
+            response.status = 200
+            response.body = self.data[:orchestrations][clean_name]
+            response
+          else;
+            raise Fog::Compute::OracleCloud::NotFound.new("Orchestration #{name} does not exist");
+          end
+        end
+      end
     end
   end
 end

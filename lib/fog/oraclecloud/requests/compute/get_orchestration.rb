@@ -19,6 +19,21 @@ module Fog
           response
         end
       end
+
+      class Mock
+        def get_orchestration(name)
+          response = Excon::Response.new
+          clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
+
+          if instance = self.data[:orchestrations][clean_name] 
+            response.status = 200
+            response.body = instance
+            response
+          else;
+            raise Fog::Compute::OracleCloud::NotFound.new("Orchestration #{name} does not exist");
+          end
+        end
+      end
     end
   end
 end
