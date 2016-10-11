@@ -131,6 +131,11 @@ module Fog
           service.recoveries.all(service_name)
         end
 
+        def patches
+          requires :service_name
+          service.patches.all(service_name)
+        end
+
         private
 
         def create

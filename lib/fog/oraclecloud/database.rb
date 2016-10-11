@@ -14,6 +14,8 @@ module Fog
       collection  :snapshots
       model       :server
       collection  :servers
+      model       :patch
+      collection  :patches
 
 			request_path 'fog/oraclecloud/requests/database'
       request :list_instances
@@ -30,6 +32,7 @@ module Fog
       request :scale_instance
       request :backup_instance
       request :recover_instance
+      request :list_patches
 
       class Real
 

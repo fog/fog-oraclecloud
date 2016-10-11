@@ -195,6 +195,19 @@ Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 		end
 	end
 
+	tests("database-patches") do
+		instances = Fog::OracleCloud[:database].instances
+		patches = instances.first.patches
+		test "should have patches" do
+			patches.is_a? Array
+		end
+		if patches.size >= 1 then
+			test "has a patch id" do
+				patches.first.id.is_a? String
+			end
+		end
+	end
+
 	tests("#database-delete", "create") do
 		db = Fog::OracleCloud[:database].instances.get('TestDB')
 		db.destroy()
