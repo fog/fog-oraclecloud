@@ -30,6 +30,13 @@ module Fog
                 instance = self.data[:instances][name]
                 self.data[:created_at].delete(name)
               end
+            when 'Maintenance'
+              info = self.data[:maintenance_at][name]
+              if Time.now - info['time'] >= Fog::Mock.delay
+                self.data[:instances][name]['status'] = 'Running'
+                self.data[:instances][name][info['attribute']] = info['value']
+                self.data[:maintenance_at].delete(name)
+              end
             end
             response.status = 200
             response.body = instance

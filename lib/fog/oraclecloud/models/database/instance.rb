@@ -73,6 +73,64 @@ module Fog
           service.delete_instance(service_name).body
         end
 
+        def scale(shape)
+          requires :service_name
+          service.scale_instance(service_name, :shape=>shape).body
+        end
+
+        def add_storage(size)
+          requires :service_name
+          service.scale_instance(service_name, :additional_storage=>size).body
+        end
+
+        def expand_storage(size, type=nil)
+          requires :service_name
+          if type.nil? then type = 'data' end
+          if type == 'backup' then type ='fra' end
+          service.scale_instance(service_name, :additional_storage=>size, :usage=>type).body
+        end
+
+        def snapshots
+          requires :service_name
+          service.snapshots.all(service_name)
+        end
+
+        def get_snapshot(snapshot_name)
+          requires :service_name
+          service.snapshots.get(service_name, snapshot_name)
+        end
+
+        def servers
+          requires :service_name
+          service.servers.all(service_name)
+        end
+
+        def backup
+          requires :service_name
+          service.backup_instance(service_name)
+        end
+
+        def backups
+          requires :service_name
+          service.backups.all(service_name)
+        end
+
+        def recover(type, value)
+          # Valid types are 'scn', 'tag' or 'timestamp'
+          requires :service_name
+          service.recover_instance(service_name, type, value)
+        end
+
+        def recover_latest
+          requires :service_name
+          service.recover_instance(service_name)
+        end
+
+        def recoveries
+          requires :service_name
+          service.recoveries.all(service_name)
+        end
+
         private
 
         def create

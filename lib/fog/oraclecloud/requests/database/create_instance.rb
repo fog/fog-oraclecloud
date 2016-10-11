@@ -47,6 +47,26 @@ module Fog
 
           self.data[:instances][service_name] = data
           self.data[:created_at][service_name] = Time.now
+
+          # Also create some compute nodes 
+          node = {
+            "status"=>"Running",
+            "creation_job_id"=>"5495118",
+            "creation_time"=>"Tue Jun 28 23:52:45 UTC 2016",
+            "created_by"=>"dbaasadmin",
+            "shape"=>"oc4",
+            "sid"=>"ORCL1",
+            "pdbName"=>"PDB1",
+            "listenerPort"=> 1521,
+            "connect_descriptor"=>"(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=db12c-xp-rac2)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=db12c-xp-rac1)(PORT=1521))(LOAD_BALANCE=ON)(FAILOVER=ON))(CONNECT_DATA=(SERVICE_NAME=PDB1.usexample.oraclecloud.internal)))",
+            "connect_descriptor_with_public_ip"=>"(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=129.144.23.176)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=129.144.23.112)(PORT=1521))(LOAD_BALANCE=ON)(FAILOVER=ON))(CONNECT_DATA=(SERVICE_NAME=PDB1.usexample.oraclecloud.internal)))",
+            "initialPrimary"=> true,
+            "storageAllocated"=> 97280,
+            "reservedIP"=>"129.144.23.112",
+            "hostname"=>"db12c-xp-rac1"
+          }
+          self.data[:servers][service_name] = [node]
+          
           response.status = 202
           response
       	end

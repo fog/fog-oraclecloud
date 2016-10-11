@@ -22,7 +22,30 @@ Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 
 		test "is built" do
 			db.ready?
+			db.shape == 'oc3'
 		end
+
+		test "scale up instance" do
+			db.scale('oc4')
+			db.wait_for { ready? }
+			db.shape == 'oc4'
+		end
+
+		test "can add extra storage" do
+			db.add_storage(1)
+			db.wait_for { ready? }
+			db.ready?
+		end
+
+		test "can expand storage" do
+			db.expand_storage(1)
+			db.wait_for { ready? }
+			db.ready?
+			db.expand_storage(1, 'backup')
+			db.wait_for { ready? }
+			db.ready?
+		end
+
 	end
 
 	tests('#database-read') do
@@ -43,6 +66,133 @@ Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 		test "should return an instance" do
 			instance.service_name.is_a? String
 		end
+		servers = instance.servers
+		test "should have compute nodes" do
+			servers.is_a? Array
+			servers.size >= 1
+			servers.first.status.is_a? String
+		end
+	end
+
+	tests("#database-backups-create", "create") do
+		instance = Fog::OracleCloud[:database].instances.first
+		instance.backup()
+		test "backup created" do
+			backups = instance.backups
+			backups.is_a? Array
+			backups.first.wait_for { completed? }
+			backups.first.completed?
+		end
+	end
+
+	tests("#database-backups", "backups") do
+		instance = Fog::OracleCloud[:database].instances.first
+		backups = instance.backups
+		test "should have backups" do
+			backups.is_a? Array
+		end
+		if backups.size >= 1 then
+			test "one of them should have completed" do
+				backups.size >= 1
+				backups.first.completed?
+			end
+		end
+	end
+
+	tests("#database-recoveries-create", "create") do
+		instance = Fog::OracleCloud[:database].instances.first
+		tag = instance.backups.first.db_tag
+		instance.recover('tag', tag)
+		recoveries = instance.recoveries
+		test "can recover by tag" do
+			recoveries.is_a? Array
+			rec = recoveries.find {|r| r.db_tag == tag}
+			rec.is_a? Fog::OracleCloud::Database::Recovery
+			rec.wait_for { completed? }
+			rec.recovery_complete_date.is_a? String
+		end
+		test "can recover by latest" do
+			instance.recover_latest()
+			rec = instance.recoveries.find {|r| !r.latest.nil? }
+			rec.is_a? Fog::OracleCloud::Database::Recovery
+			rec.latest
+			rec.wait_for { completed? }
+			rec.recovery_complete_date.is_a? String			
+		end
+		test "can recover by timestamp" do
+			time = Time.now
+			instance.recover('timestamp', time)
+			rec = instance.recoveries.find {|r| !r.latest.nil? }
+			rec.is_a? Fog::OracleCloud::Database::Recovery
+			rec.timestamp == time
+			rec.wait_for { completed? }
+			rec.recovery_complete_date.is_a? String						
+		end
+		# Need to test SCN. Not sure how to mock test this?
+	end
+
+	tests("#database-recoveries", "recoveries") do
+		instances = Fog::OracleCloud[:database].instances
+		recs = Fog::OracleCloud[:database].recoveries.all(instances.first.service_name)
+		test "might have recoveries" do
+			recs.is_a? Array
+		end
+		if recs.size >= 1 then
+			test "one of them should have completed" do
+				recs.first.completed?
+			end
+		end
+	end
+
+	tests("#database-snapshots-create", "create") do
+		instances = Fog::OracleCloud[:database].instances
+
+		snap = Fog::OracleCloud[:database].snapshots.create(
+			:name => 'TestSnapshot',
+			:description => 'A new snapshot',
+			:database_id => instances.first.service_name
+		)
+		test "can create a snapshot" do
+			snap.is_a? Fog::OracleCloud::Database::Snapshot
+		end
+
+		test "is being built" do
+			!snap.completed?
+		end
+		snap.wait_for { completed? }
+
+		test "is built" do
+			snap.completed?
+		end
+	end
+
+	tests("#database-snapshots", "snapshots") do
+		instances = Fog::OracleCloud[:database].instances
+		snaps = instances.first.snapshots
+		test "might have snapshots" do
+			snaps.is_a? Array
+		end
+		if snaps.size >= 1 then
+			test "one of them should have completed" do
+				snaps.first.completed?
+			end
+			test "can get snapshot" do
+				snap = instances.first.get_snapshot(snaps.first.name)
+				snap.name.is_a? String
+				snap.cloned_services.is_a? Array
+				snap.cloned_services.first['clonedServiceName'].is_a? String
+			end
+		end
+	end
+
+	tests("#database-shapshots-delete", "create") do
+		db = Fog::OracleCloud[:database].instances.get('TestDB')
+		snap = db.snapshots.first
+		snap.destroy()
+		snap.wait_for { deleting? }
+		tests("should actually delete snapshot").raises(Fog::OracleCloud::Database::NotFound) do 
+			snap.wait_for { status == 'Stopped' }
+		end
 	end
 
 	tests("#database-delete", "create") do
@@ -53,4 +203,6 @@ Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 			db.wait_for { stopped? } 
 		end
 	end
+
+
 end

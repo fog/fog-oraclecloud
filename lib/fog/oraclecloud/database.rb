@@ -6,12 +6,30 @@ module Fog
       model_path	'fog/oraclecloud/models/database'
       model				:instance
       collection	:instances
+      model       :backup
+      collection  :backups
+      model       :recovery
+      collection  :recoveries
+      model       :snapshot
+      collection  :snapshots
+      model       :server
+      collection  :servers
 
 			request_path 'fog/oraclecloud/requests/database'
       request :list_instances
       request :get_instance
       request :create_instance
       request :delete_instance
+      request :list_backups
+      request :list_recoveries
+      request :list_snapshots
+      request :get_snapshot
+      request :create_snapshot
+      request :delete_snapshot
+      request :list_servers
+      request :scale_instance
+      request :backup_instance
+      request :recover_instance
 
       class Real
 
@@ -66,9 +84,14 @@ module Fog
 
         def self.data 
           @data ||= {
-            :instances => {},
+            :instances  => {},
+            :snapshots  => {},
+            :servers    => {},
+            :backups    => {},
+            :recoveries => {},
             :deleted_at => {},
-            :created_at => {}
+            :created_at => {},
+            :maintenance_at => {}
           }
         end
 
