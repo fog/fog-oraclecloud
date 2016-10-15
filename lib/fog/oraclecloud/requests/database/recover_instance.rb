@@ -26,6 +26,9 @@ module Fog
 
           if !self.data[:recoveries][service_name].is_a? Array then 
             self.data[:recoveries][service_name] = []
+          end
+
+          if !self.data[:created_at][:recoveries] 
             self.data[:created_at][:recoveries] = {}
             self.data[:created_at][:recoveries][service_name] = []
           end

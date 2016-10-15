@@ -16,7 +16,9 @@ module Fog
         def list_recoveries(db_name)
           response = Excon::Response.new
 
+          if !self.data[:recoveries][db_name] then self.data[:recoveries][db_name] = [] end
           recoveries = self.data[:recoveries][db_name]
+
           recoveries.each_with_index { |r, i| 
             if r['status'] = 'IN PROGRESS' then
               if Time.now - self.data[:created_at][:recoveries][db_name][i] >= Fog::Mock.delay

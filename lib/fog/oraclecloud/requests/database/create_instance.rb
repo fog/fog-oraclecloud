@@ -3,30 +3,43 @@ module Fog
     class Database
       class Real
 
-      	def create_instance(service_name, edition, vmPublicKey, shape, version, options={})
-          body_data     = {
-            'serviceName'             => service_name,
-            'version'                 => options[:version],
-            'level'										=> options[:level],
-            'edition'                 => edition,
-            'subscriptionType'				=> options[:subscriptionType],
-            'description'							=> options[:description],
-            'shape'                   => options[:shape],
-            'vmPublicKeyText'         => vmPublicKey,
-            'parameters'              => {
-              'shape'                   => shape,
-              'version'                 => version
-            }
+        def create_instance(config, options)
+          parameters = options.select{|key, value| [:admin_password, :backup_destination, :charset, :cloud_storage_container, :cloud_storage_pwd, :cloud_storage_user, :cloud_storage_if_missing, :disaster_recovery, :failover_database, :golden_gate, :is_rac, :ncharset, :pdb_name, :sid, :timezone, :usable_storage].include?(key)}
+          params = {
+            'type' => 'db'
+          }
+          parameters.each { |key, value| 
+            if !value.nil? then 
+              if key == :cloud_storage_container then 
+                if !value.start_with?("/Compute-") then
+                  value = "/Storage-#{@identity_domain}/#{value}"
+                end
+              end
+              new_key = key.to_s.split('_').collect(&:capitalize).join
+              new_key = new_key[0,1].downcase + new_key[1..-1]
+              params[new_key] = value
+            end
+          }
+          body_data  = {
+            'serviceName'         => config[:service_name],
+            'version'             => config[:version],
+            'level'               => config[:level],
+            'edition'             => config[:edition],
+            'subscriptionType'    => config[:subscription_type],
+            'description'         => config[:description],
+            'shape'               => config[:shape],
+            'vmPublicKeyText'     => config[:ssh_key],
+            'parameters'          => [params]
           }
           body_data = body_data.reject {|key, value| value.nil?}
-        
+
           request(
             :method   => 'POST',
             :expects  => 202,
             :path     => "/paas/service/dbcs/api/v1.1/instances/#{@identity_domain}",
             :body     => Fog::JSON.encode(body_data),
             #:headers  => {
-            #	'Content-Type'=>'application/vnd.com.oracle.oracloud.provisioning.Service+json'
+            # 'Content-Type'=>'application/vnd.com.oracle.oracloud.provisioning.Service+json'
             #}
           )
         end
@@ -34,19 +47,30 @@ module Fog
       end
 
       class Mock
-        def create_instance(service_name, edition, vmPublicKey, shape, version, options={})
-      		response = Excon::Response.new
+        def create_instance(config, options)
+          response = Excon::Response.new
 
           data = {
-            'service_name' => service_name,
-            'shape' => shape,
-            'edition' => edition,
-            'version' => version,
-            'status' => 'In Progress'
-          }.merge(options.select {|key, value| ["description"].include?(key) })
+            'serviceName' => config[:service_name],
+            'shape' => config[:shape],
+            'edition' => config[:edition],
+            'version' => config[:version],
+            'status' => 'In Progress',
+            'charset' => 'AL32UTF8',
+            'ncharset' => 'AL16UTF16',
+            'pdbName' => 'pdb1', # Note this is only valid for 12c instances. Too hard to fix for mocking
+            'timezone' => 'UTC',
+            'totalSharedStorage' => options[:usable_storage],
+            'domainName' => @identity_domain,
+            'creation_date'=>Time.now.strftime('%Y-%b-%dT%H:%M:%S'),
+            'serviceType'=>'DBaaS',
+            'creator'=>@username
+          }
+            .merge(config.select {|key, value| [:description, :level, :subscription_type].include?(key) })
+            .merge(options.select {|key, value| [:backup_destination, :failover_database, :cloud_storage_container, :is_rac, :ncharset, :pdb_name, :sid, :timezone].include?(key) })
 
-          self.data[:instances][service_name] = data
-          self.data[:created_at][service_name] = Time.now
+          self.data[:instances][config[:service_name]] = data
+          self.data[:created_at][config[:service_name]] = Time.now
 
           # Also create some compute nodes 
           node = {
@@ -65,11 +89,11 @@ module Fog
             "reservedIP"=>"129.144.23.112",
             "hostname"=>"db12c-xp-rac1"
           }
-          self.data[:servers][service_name] = [node]
+          self.data[:servers][config[:service_name]] = [node]
           
           response.status = 202
           response
-      	end
+        end
       end
     end
   end

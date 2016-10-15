@@ -46,6 +46,14 @@ module Fog
           @connection = Fog::XML::Connection.new(region_url)
       	end
 
+        def username
+          @username
+        end
+
+        def password
+          @password
+        end
+
       	def auth_header
         	auth_header ||= 'Basic ' + Base64.encode64("#{@username}:#{@password}").gsub("\n",'')
       	end

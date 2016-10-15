@@ -22,9 +22,8 @@ module Fog
         def backup_instance(service_name)
       		response = Excon::Response.new
 
-          if !self.data[:backups][service_name].is_a? Array then 
+          if !self.data[:backups][service_name].is_a? Array 
             self.data[:backups][service_name] = []
-            self.data[:created_at][service_name] = []
           end
           self.data[:backups][service_name].push({
             'backupCompleteDate'=>Time.now.strftime('%d-%b-%Y %H:%M:%S UTC'),
@@ -32,7 +31,11 @@ module Fog
             'status'=>'IN PROGRESS',
             'database_id'=>service_name
           })
-          self.data[:created_at][service_name].push(Time.now)
+          if !self.data[:created_at][:backups] 
+            self.data[:created_at][:backups] = {}
+            self.data[:created_at][:backups][service_name] = []
+          end
+          self.data[:created_at][:backups][service_name].push(Time.now)
           response.status = 202
           response
       	end
