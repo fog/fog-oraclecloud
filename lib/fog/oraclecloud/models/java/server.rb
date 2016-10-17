@@ -6,19 +6,19 @@ module Fog
       class Server < Fog::Model
       	identity :name
 
-      	attribute :clusterName
+      	attribute :cluster_name,     :aliases=>'clusterName'
       	attribute :name
       	attribute :shape
-      	attribute :nodeType
-      	attribute :isAdmin
+      	attribute :node_type,        :aliases=>'nodeType'
+      	attribute :is_admin,         :aliases=>'is_admin'
       	attribute :hostname
       	attribute :status
-      	attribute :reservedIp
-      	attribute :storageAllocated
-      	attribute :creationDate
+      	attribute :reserved_ip,      :aliases=>'reserved_ip'
+      	attribute :storage_allocated, :aliases=>'storageAllocated'
+      	attribute :creation_date,     :aliases=>'creationDate'
 
       	def ip_addr
-          reservedIp.blank? ? hostname : reservedIp
+          reserved_ip.blank? ? hostname : reserved_ip
         end
       end
     end

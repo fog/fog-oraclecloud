@@ -76,6 +76,10 @@ Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 			servers.size >= 1
 			servers.first.status.is_a? String
 		end
+
+		test "has special attributes" do
+			instance.failover_database == 'no'
+		end
 	end
 
 	tests("#database-backups-create", "create") do

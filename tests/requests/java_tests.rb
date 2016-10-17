@@ -2,19 +2,16 @@ require 'pp'
 
 Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 	
-	tests("#database-create", "create") do
+	tests("#java-create", "create") do
 		instance = Fog::OracleCloud[:java].instances.create(
 			:service_name => 'TestWLS',
 			:description => 'A new weblogic instance',
-			:cloud_storage_container => 'todo',
-			:cloud_storage_user => 'admin',
-			:cloud_storage_password => 'password',
-			:dbaName => 'SYS',
-			:dbaPassword => 'password',
-			:dbServiceName => 'TestDB',
+			:dba_name => 'SYS',
+			:dba_password => 'password',
+			:db_service_name => 'TestDB',
 			:shape => 'oc3',
 			:version => '12.2.1',
-			:vmPublicKey => 'ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAkNNQ4ri2oUW46mBO/4CHMGCOALciumwGvFEMDLGNnlinstanceUSqU4IRrqgj+znLClfb29Oer0devdarM6DilsZVgZ2YbI5ZD5vICR/O9J0c28dArwbtFeIjcV2TCWyj5xKEXF1r+OrJMexHQa0fW1URGrU8QODpJNC/9eCVGcEXddL31xTZYpjoVOCVx66kNa6lSHEVV3T4zaCby9Oe5QI4gZe1+xyxHPNEW5wogwS3dlKSyL2CfBP0aUKOmJ5Nrl8+y0GqJQXdGjZ9FIknmwWueRW/6qPQvZocjOZ8YiPZgAP0RNy6lL+u8mnAazj/mrEdmB5QUzpDAllIr5Tn/xaddZQ==',
+			:ssh_key => 'ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAkNNQ4ri2oUW46mBO/4CHMGCOALciumwGvFEMDLGNnlinstanceUSqU4IRrqgj+znLClfb29Oer0devdarM6DilsZVgZ2YbI5ZD5vICR/O9J0c28dArwbtFeIjcV2TCWyj5xKEXF1r+OrJMexHQa0fW1URGrU8QODpJNC/9eCVGcEXddL31xTZYpjoVOCVx66kNa6lSHEVV3T4zaCby9Oe5QI4gZe1+xyxHPNEW5wogwS3dlKSyL2CfBP0aUKOmJ5Nrl8+y0GqJQXdGjZ9FIknmwWueRW/6qPQvZocjOZ8YiPZgAP0RNy6lL+u8mnAazj/mrEdmB5QUzpDAllIr5Tn/xaddZQ==',
 		)
 		test "can create a java instance" do
 			instance.is_a? Fog::OracleCloud::Java::Instance
@@ -47,6 +44,13 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 		instance = Fog::OracleCloud[:java].instances.get(instances.first.service_name)
 		test "should return an instance" do
 			instance.service_name.is_a? String
+		end
+
+		servers = instance.servers
+		test "should have compute nodes" do
+			servers.is_a? Array
+			servers.size >= 1
+			servers.first.status.is_a? String
 		end
 	end
 

@@ -12,7 +12,19 @@ module Fog
         end
       end
 
-     
+      class Mock
+        def list_servers(db_name)
+          response = Excon::Response.new
+
+          servers = self.data[:servers][db_name]
+
+          response.body =  {
+            'servers' => servers
+          }
+
+          response
+        end
+      end
     end
   end
 end

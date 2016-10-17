@@ -11,7 +11,7 @@ module Fog
           parameters.each { |key, value| 
             if !value.nil? then 
               if key == :cloud_storage_container then 
-                if !value.start_with?("/Compute-") then
+                if !value.start_with?("/Storage-") then
                   value = "/Storage-#{@identity_domain}/#{value}"
                 end
               end
