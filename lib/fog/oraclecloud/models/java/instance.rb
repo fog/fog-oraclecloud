@@ -106,14 +106,16 @@ module Fog
         end
 
         def domain_mode=(value)
+          if value.to_s == '' then value = 'DEVELOPMENT' end
           if %w(DEVELOPMENT PRODUCTION).include? value then
             attributes[:domain_mode]=value
           else
-            raise ArgumentError, "Invalid domain mode. Valid values - DEVELOPMENT or PRODUCTION"
+            raise ArgumentError, "Invalid domain mode '#{value}'. Valid values - DEVELOPMENT or PRODUCTION"
           end
         end
 
         def edition=(value)
+          if value.to_s == '' then value = 'EE' end
           if %w(SE EE SUITE).include? value then
             attributes[:edition]=value
           else
@@ -123,8 +125,8 @@ module Fog
 
         def num_nodes=(value)
           if value.nil? then value = 1 end
-          if [1, 2, 4, 8].include? value then
-            attributes[:num_nodes]=value
+          if [1, 2, 4, 8].include? value.to_i then
+            attributes[:num_nodes] = value.to_i
           else
             raise ArgumentError, "Invalid server count (#{value}). Valid values - 1, 2, 4 or 8"
           end

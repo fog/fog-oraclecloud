@@ -93,6 +93,14 @@ module Fog
           @identity_domain   = options[:oracle_domain]
         end
 
+        def username
+          @username
+        end
+
+        def password
+          @password
+        end
+
         def self.data 
           @data ||= {
             :instances  => {},
