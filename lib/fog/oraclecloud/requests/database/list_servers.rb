@@ -19,7 +19,7 @@ module Fog
           servers = self.data[:servers][db_name]
 
           response.body = {
-            "servers" : [servers]
+            "servers" => servers
           }
           response
         end

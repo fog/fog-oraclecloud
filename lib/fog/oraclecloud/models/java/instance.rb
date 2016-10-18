@@ -122,6 +122,7 @@ module Fog
         end
 
         def num_nodes=(value)
+          if value.nil? then value = 1 end
           if [1, 2, 4, 8].include? value then
             attributes[:num_nodes]=value
           else
@@ -176,7 +177,7 @@ module Fog
         private
 
         def create
-        	requires :service_name, :dba_name, :dba_password, :db_service_name, :shape, :version, :ssh_key
+        	requires :service_name, :dba_name, :dba_password, :db_service_name, :shape, :version, :ssh_key, :admin_password
           
           #data = service.create_instance(service_name, cloud_storage_container, cloud_storage_user, cloud_storage_password, dba_name, dba_password, db_servicename, shape, version, vm_public_key,
           #                                  :level => level,

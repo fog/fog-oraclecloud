@@ -105,10 +105,12 @@ module Fog
             value = 'yes'
           elsif value == false || value.nil?
             value = 'no'
-          else
-            raise ArgumentError, "Invalid failover database value (#{value})"
           end
-          attributes[:failover_database] = value
+          if %w(yes no).include? value then
+            attributes[:failover_database]=value
+          else
+            raise ArgumentError, "Invalid failover database value"
+          end
         end
 
         def is_rac=(value)
@@ -116,10 +118,12 @@ module Fog
             value = 'yes'
           elsif value == false || value.nil?
             value = 'no'
-          else
-            raise ArgumentError, "Invalid is_rac value (#{value})"
           end
-          attributes[:is_rac]=value
+          if %w(yes no).include? value then
+            attributes[:is_rac]=value
+          else
+            raise ArgumentError, "Invalid is_rac value"
+          end
         end
 
         def ncharset=(value)
