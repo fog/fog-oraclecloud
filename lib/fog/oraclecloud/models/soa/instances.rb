@@ -13,11 +13,7 @@ module Fog
         end
 
         def get(id)
-          begin
-            new(service.get_instance(id).body)
-          rescue Fog::OracleCloud::SOA::NotFound
-            nil
-          end
+          new(service.get_instance(id).body) 
         end
       end
     end

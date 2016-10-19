@@ -60,22 +60,36 @@ module Fog
       class Mock
 
         def initialize(options={})
-
+          @username = options[:oracle_username]
+          @password = options[:oracle_password]
+          @identity_domain   = options[:oracle_domain]
+          @region_url = options[:oracle_region] == 'emea' ? 'https://jcs.emea.oraclecloud.com' : 'https://jaas.oraclecloud.com'
         end
 
-        def self.data
-          @data ||= Hash.new do |hash, key|
-            hash[key] = {
-              :instances => {},
-              :servers => {},
-              :deleted_at => {},
-              :created_at => {}
-            }
-          end
+         def username
+          @username
         end
 
-        def data
-          self.class.data[@oracle_username]
+        def password
+          @password
+        end
+
+
+       def self.data 
+          @data ||= {
+            :instances => {},
+            :servers => {},
+            :deleted_at => {},
+            :created_at => {}
+          }
+        end
+
+        def self.reset
+          @data = nil
+        end
+
+        def data 
+          self.class.data
         end
       end
     end
