@@ -29,7 +29,7 @@ module Fog
             response.status = 200
             response.body = instance
             response
-          else;
+          else
             raise Fog::Compute::OracleCloud::NotFound.new("Orchestration #{name} does not exist");
           end
         end

@@ -11,6 +11,18 @@ module Fog
           response
         end
       end
+
+      class Mock
+        def list_orchestrations
+          response = Excon::Response.new
+
+          orchs = self.data[:orchestrations].values
+          response.body = {
+            'result' => orchs
+          }
+          response
+        end
+      end
     end
   end
 end

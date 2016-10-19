@@ -36,9 +36,7 @@ Shindo.tests('Fog::Compute[oraclecloud] | instance requests', 'instances') do
 		test "returns an Array" do
 			instances.is_a? Array
 		end
-		instances.each do |ins|
-			puts "#{ins.clean_name} - #{ins.state}"
-		end
+		
 		test "should return records" do
 			instances.size >= 1
 		end

@@ -8,7 +8,7 @@ Shindo.tests('Fog::Storage[oraclecloud] | storage requests', 'storage') do
 			container.is_a? Fog::Storage::OracleCloud::Container
 			container.name.is_a? String
 		end
-
+pp container
 		check = Fog::Storage[:oraclecloud].containers.get(container.name)
 		test "can get container" do
 			check.name == container.name
@@ -24,6 +24,7 @@ Shindo.tests('Fog::Storage[oraclecloud] | storage requests', 'storage') do
 
 	tests("#storage-read") do
 		containers = Fog::Storage[:oraclecloud].containers
+
 		test "returns an Array" do
 			containers.is_a? Array
 		end
@@ -40,7 +41,7 @@ Shindo.tests('Fog::Storage[oraclecloud] | storage requests', 'storage') do
 	end
 
 	tests("#object-read") do
-		objects = Fog::Storage[:oraclecloud].containers[5].objects
+		objects = Fog::Storage[:oraclecloud].containers.first.objects
 		test "returns an Array" do
 			objects.is_a? Array
 		end

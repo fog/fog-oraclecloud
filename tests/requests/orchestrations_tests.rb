@@ -1,10 +1,11 @@
 require 'pp'
 
 Shindo.tests('Fog::Compute[oraclecloud] | orchestration requests', 'orchestrations') do
-	
+	orch_name = "OrchestrationTest-#{rand(100)}"
+
 	tests("#orchestrations-create", "create") do
 		orchestration = Fog::Compute[:oraclecloud].orchestrations.create(
-			:name => "OrchestrationTest-#{rand(100)}",
+			:name => orch_name,
 			:oplans => [{
 				'label' =>"WebServer",
 				'obj_type' => "launchplan",
@@ -41,7 +42,7 @@ Shindo.tests('Fog::Compute[oraclecloud] | orchestration requests', 'orchestratio
 			}]
 		}
 		orchestration.save()
-		orchestration.wait_for { ready? }
+		#orchestration.wait_for { ready? }
 		test "can update orchestration" do
 			check = Fog::Compute[:oraclecloud].orchestrations.get(orchestration.name)
 			check.oplans.size == 2
@@ -58,10 +59,7 @@ Shindo.tests('Fog::Compute[oraclecloud] | orchestration requests', 'orchestratio
 			orchestration.status == 'stopped'
 		end
 
-		orchestration.destroy()
-		tests("can delete orchestration").raises(Excon::Error::NotFound) do
-			check = Fog::Compute[:oraclecloud].orchestrations.get(orchestration.name)
-		end
+		
 	end
 
 	tests("#orchestrations-read") do
@@ -69,9 +67,7 @@ Shindo.tests('Fog::Compute[oraclecloud] | orchestration requests', 'orchestratio
 		test "returns an Array" do
 			orchestrations.is_a? Array
 		end
-		orchestrations.each do |orch|
-			puts orch.name
-		end
+		
 		test "should return keys" do
 			orchestrations.size >= 1
 		end
@@ -82,6 +78,14 @@ Shindo.tests('Fog::Compute[oraclecloud] | orchestration requests', 'orchestratio
 		orchestrations = Fog::Compute[:oraclecloud].orchestrations.get(orchestrations.first.name)
 		test "should return a key" do
 			orchestrations.name.is_a? String
+		end
+	end
+
+	tests("#orchestrations-delete", "create") do
+		orchestration = Fog::Compute[:oraclecloud].orchestrations.get(orch_name)
+		orchestration.destroy()
+		tests("can delete orchestration").raises(Fog::Compute::OracleCloud::NotFound) do
+			check = Fog::Compute[:oraclecloud].orchestrations.get(orchestration.name)
 		end
 	end
 end

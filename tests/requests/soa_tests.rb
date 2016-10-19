@@ -2,33 +2,33 @@ require 'pp'
 
 Shindo.tests('Fog::Soa[oraclecloud] | SOA requests', 'soa') do
 	
-	#tests("#java-create", "create") do
-	#	sshkey = Fog::Compute[:oracle].ssh_keys.first.name
-	#	new_instance = Fog::Compute[:oracle].instances.create(
-	#		:name=>'Test123', 
-	#		:shape=>'oc3', 
-	#		:imagelist=>'/oracle/public/oel_6.4_2GB_v1',
-	#		:label=>'dev-vm',
-	#		:sshkeys=>[sshkey]
+	#tests("#soa-create", "create") do
+	#	instance = Fog::OracleCloud[:soa].instances.create(
+	#		:service_name => 'TestWLS',
+	#		:description => 'A new weblogic instance',
+	#		:dba_name => 'SYS',
+	#		:dba_password => 'password',
+	#		:db_service_name => 'TestDB',
+	#		:admin_password => 'Welcome1$',
+	#		:admin_username => 'weblogic',
+	#		:shape => 'oc3',
+	#		:version => '12.2.1',
+	#		:ssh_key => 'ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAkNNQ4ri2oUW46mBO/4CHMGCOALciumwGvFEMDLGNnlinstanceUSqU4IRrqgj+znLClfb29Oer0devdarM6DilsZVgZ2YbI5ZD5vICR/O9J0c28dArwbtFeIjcV2TCWyj5xKEXF1r+OrJMexHQa0fW1URGrU8QODpJNC/9eCVGcEXddL31xTZYpjoVOCVx66kNa6lSHEVV3T4zaCby9Oe5QI4gZe1+xyxHPNEW5wogwS3dlKSyL2CfBP0aUKOmJ5Nrl8+y0GqJQXdGjZ9FIknmwWueRW/6qPQvZocjOZ8YiPZgAP0RNy6lL+u8mnAazj/mrEdmB5QUzpDAllIr5Tn/xaddZQ==',
 	#	)
-	#	test "can create an instance" do
-	#		new_instance.is_a? Fog::Compute::Oracle::Instance
-	#	end
+	#	test "can create a soa instance" do
+	#		instance.is_a? Fog::OracleCloud::Soa::Instance
+	#	end	
+#
 	#	test "is being built" do
-	#		new_instance.state != "running"
+	#		!instance.ready?
 	#	end
-	#	new_instance.wait_for { ready? }
+	#	instance.wait_for { ready? }
 #
 	#	test "is built" do
-	#		new_instance.state == 'running'
-	#	end
-#
-	#	new_instance.destroy()
-	#	test "can delete instance" do
-	#		check = Fog::Compute[:oracle].instances.get(new_instance.name)
-	#		check.state == 'stopping'
+	#		instance.ready?
 	#	end
 	#end
+
 
 	tests('#soa-read') do
 		instances = Fog::OracleCloud[:soa].instances

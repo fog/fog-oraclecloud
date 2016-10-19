@@ -73,7 +73,26 @@ module Fog
       end
 
       class Mock
+        def initialize(options={})
+          @username = options[:oracle_username]
+          @password = options[:oracle_password]
+          @identity_domain   = options[:oracle_domain]
+          @api_endpoint   = options[:oracle_compute_api]
+        end
 
+        def self.data 
+          @data ||= {
+            :containers => {}
+          }
+        end
+
+        def self.reset
+          @data = nil
+        end
+
+        def data 
+          self.class.data
+        end
       end
     end
   end

@@ -17,6 +17,20 @@ module Fog
           )
       	end
       end
+
+      class Mock
+        def delete_orchestration (name)
+          response = Excon::Response.new
+          clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
+          if self.data[:orchestrations][clean_name] 
+            self.data[:orchestrations].delete(clean_name)
+            response.status = 204
+            response
+          else
+            raise Fog::Compute::OracleCloud::NotFound.new("Orchestration #{name} does not exist");
+          end
+        end
+      end
     end
   end
 end

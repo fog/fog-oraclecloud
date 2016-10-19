@@ -19,7 +19,6 @@ module Fog
         def save
           requires :name
           data = service.create_container(name)
-          pp data
           merge_attributes(data.headers)
         end 
         

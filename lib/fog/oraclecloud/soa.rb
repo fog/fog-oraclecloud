@@ -66,7 +66,10 @@ module Fog
         def self.data
           @data ||= Hash.new do |hash, key|
             hash[key] = {
-              :instances    => {}
+              :instances => {},
+              :servers => {},
+              :deleted_at => {},
+              :created_at => {}
             }
           end
         end
