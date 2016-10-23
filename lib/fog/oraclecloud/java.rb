@@ -1,8 +1,9 @@
 module Fog
   module OracleCloud
     class Java < Fog::Service
-      requires :oracle_username, :oracle_password, :oracle_domain, :oracle_region
-
+      requires :oracle_username, :oracle_password, :oracle_domain
+      recognizes :oracle_region
+      
       model_path	'fog/oraclecloud/models/java'
       model				:instance
       collection	:instances
