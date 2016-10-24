@@ -66,11 +66,86 @@ instance.dba_name = 'Admin'
 instance.dba_password = 'password'
 instance.destroy()
 ```
-## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+## Supported Services
+The following services are supported:
+* Java Cloud Service
+  * create_instance
+  * delete_instance
+  * get_instance
+  * get_server
+  * list_instances
+  * list_servers
+* SOA Cloud Service
+  * create_instance
+  * delete_instance
+  * get_instance
+  * list_instances
+* Database Cloud Service
+  * backup_instance
+  * create_instance
+  * create_snapshot
+  * delete_instance
+  * delete_snapshot
+  * get_instance
+  * get_snapshot
+  * list_backups
+  * list_instances
+  * list_patches
+  * list_recoveries
+  * list_servers
+  * list_snapshots
+  * recover_instance
+  * scale_instance
+* Compute Cloud Servcice
+  * create_image
+  * create_image_list
+  * create_instance
+  * create_orchestration
+  * create_security_application
+  * create_security_rule
+  * create_ssh_key
+  * create_volume
+  * delete_image_list
+  * delete_instance
+  * delete_orchestration
+  * delete_security_application
+  * delete_ssh_key
+  * get_image
+  * get_image_list
+  * get_instance
+  * get_orchestration
+  * get_security_application
+  * get_security_rule
+  * get_ssh_key
+  * list_image_lists
+  * list_images
+  * list_instances
+  * list_orchestrations
+  * list_security_applications
+  * list_security_lists
+  * list_security_rules
+  * list_ssh_keys
+  * list_volumes
+  * start_orchestration
+  * stop_orchestration
+  * update_image
+  * update_image_list
+  * update_orchestration
+  * update_ssh_key
+* Storage Cloud Service
+  * create_container
+  * delete_container
+  * get_container
+  * list_containers
+  
+These basically align with the REST API documentation on docs.oracle.com. Check there for particulars around parameters, types etc. 
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+**Note**: The APIs above are slightly modified from the Oracle cloud to provide consistency across requests. Keep in mind the following:
+* All parameters are given in lower camel case (ie: service_name, not ServiceName)
+* For IaaS services you don't need to provide the fully qualified names (ie: Compute/<identity_domain>/<name>). The system will prepend the configured user when necessary
+* The Java and Database configuration has all the parameters as top level attributes (ie: don't configure parameters/content_port, use content_port)
+* Smart defaults are included where possible. Check the code to see.
 
 ## Contributing
 
