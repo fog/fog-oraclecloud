@@ -19,6 +19,18 @@ module Fog
 
           if instance = self.data[:instances][name]
             case instance['status']
+            when 'Starting Provisioning'
+              self.data[:instances][name]['status'] = 'In Progress'
+              # This simulates the few seconds the Oracle Cloud takes to add this instance to the GET request after creating
+              raise(
+                Excon::Errors.status_error(
+                  { :expects => 200 },
+                  Excon::Response.new({
+                    :status => 404,
+                    :body => 'No such service exists, check domain and service name'
+                  })
+                )
+              )
             when 'Terminating'
               if Time.now - self.data[:deleted_at][name] >= Fog::Mock.delay
                 self.data[:deleted_at].delete(name)

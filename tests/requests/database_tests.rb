@@ -11,7 +11,7 @@ Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 			:shape => 'oc3',
 			:version => '12.1.0.2',
 			:backup_destination => 'NONE',
-			:admin_password => 'password123',
+			:admin_password => 'Welcome1#',
 			:usable_storage => '15'
 		)
 
@@ -50,6 +50,19 @@ Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 			db.ready?
 		end
 
+	end
+
+	tests("#database-attributes", "attributes") do
+		tests("should check shape").raises(ArgumentError) do
+			instance = Fog::OracleCloud[:database].instances.new({
+				:shape => 'fsdfsdf'
+			})
+		end
+		tests("should check service_name").raises(ArgumentError) do
+			instance = Fog::OracleCloud[:database].instances.new({
+				:service_name => 'Has_Underscore'
+				})
+		end
 	end
 
 	tests('#database-read') do

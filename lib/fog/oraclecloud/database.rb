@@ -21,6 +21,7 @@ module Fog
 			request_path 'fog/oraclecloud/requests/database'
       request :list_instances
       request :get_instance
+      request :get_instance_from_job
       request :create_instance
       request :delete_instance
       request :list_backups

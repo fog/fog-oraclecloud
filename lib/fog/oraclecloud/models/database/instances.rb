@@ -16,6 +16,9 @@ module Fog
           new(service.get_instance(id).body)
         end
 
+        def get_from_job(job_id)
+          new(service.get_instance_from_job(job_id).body)
+        end
       end
     end
   end

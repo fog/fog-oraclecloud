@@ -4,15 +4,15 @@ module Fog
       class Real
 
         def create_instance(config, options)
-          parameters = options.select{|key, value| [:admin_password, :backup_destination, :charset, :cloud_storage_container, :cloud_storage_pwd, :cloud_storage_user, :cloud_storage_if_missing, :disaster_recovery, :failover_database, :golden_gate, :is_rac, :ncharset, :pdb_name, :sid, :timezone, :usable_storage].include?(key)}
+          parameters = options.select{|key, value| [:admin_password, :backup_destination, :charset, :cloud_storage_container, :cloud_storage_pwd, :cloud_storage_user, :cloud_storage_if_missing, :disaster_recovery, :failover_database, :golden_gate, :is_rac, :ncharset, :pdb_name, :sid, :timezone, :usable_storage, :create_storage_container_if_missing].include?(key)}
           params = {
             'type' => 'db'
           }
           parameters.each { |key, value| 
             if !value.nil? then 
               if key == :cloud_storage_container then 
-                if !value.start_with?("/Storage-") then
-                  value = "/Storage-#{@identity_domain}/#{value}"
+                if !value.start_with?("Storage-") then
+                  value = "Storage-#{@identity_domain}/#{value}"
                 end
               end
               new_key = key.to_s.split('_').collect(&:capitalize).join
@@ -49,17 +49,18 @@ module Fog
       class Mock
         def create_instance(config, options)
           response = Excon::Response.new
-
+          job_id = rand(10000).to_s
           data = {
             'serviceName' => config[:service_name],
             'shape' => config[:shape],
             'edition' => config[:edition],
             'version' => config[:version],
-            'status' => 'In Progress',
+            'status' => 'Starting Provisioning', # Not a valid status, but we use it to simulate the time that the Oracle Cloud takes to add this to the list of instances
             'charset' => 'AL32UTF8',
             'ncharset' => 'AL16UTF16',
             'pdbName' => 'pdb1', # Note this is only valid for 12c instances. Too hard to fix for mocking
             'timezone' => 'UTC',
+            'creation_job_id' => job_id,
             'totalSharedStorage' => options[:usable_storage],
             'domainName' => @identity_domain,
             'creation_date'=>Time.now.strftime('%Y-%b-%dT%H:%M:%S'),
@@ -90,7 +91,7 @@ module Fog
             "hostname"=>"db12c-xp-rac1"
           }
           self.data[:servers][config[:service_name]] = [node]
-          
+          response.headers['Location'] = "https://dbaas.oraclecloud.com:443/paas/service/dbcs/api/v1.1/instances/#{@identity_domain}/status/create/job/#{job_id}"
           response.status = 202
           response
         end

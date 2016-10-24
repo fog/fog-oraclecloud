@@ -7,23 +7,23 @@ module Fog
             config[:cloudStorageContainer] = "/Storage-#{@identity_domain}/#{config[:cloudStorageContainer]}"
           end
 
-          config[:parameters] = options.select{|key, value| [:adminPassword, :adminPort, :adminUserName, :backupVolumeSize, :clusterName, :contentPort, :dbaName, :dbaPassword, :dbServiceName, :deploymentChannelPort, :domainMode, :domainName, :domainPartitionCount, :domainVolumeSize, :edition, :ipReservations, :managedServerCount, :msInitialHeapMB, :msJvmArgs, :msMaxHeapMB, :msMaxPermMB, :msPermMb, :nodeManagerPassword, :nodeManagerPort, :nodeManagerUserName, :overwriteMsJvmArgs, :pdbName, :securedAdminPort, :securedContentPort, :shape, :VMsPublicKey].include?(key)}
-          config[:parameters].reject! { |key,value| value.nil?}
+          parameters = options.select{|key, value| [:adminPassword, :adminPort, :adminUserName, :backupVolumeSize, :clusterName, :contentPort, :dbaName, :dbaPassword, :dbServiceName, :deploymentChannelPort, :domainMode, :domainName, :domainPartitionCount, :domainVolumeSize, :edition, :ipReservations, :managedServerCount, :msInitialHeapMB, :msJvmArgs, :msMaxHeapMB, :msMaxPermMB, :msPermMb, :nodeManagerPassword, :nodeManagerPort, :nodeManagerUserName, :overwriteMsJvmArgs, :pdbName, :securedAdminPort, :securedContentPort, :shape, :VMsPublicKey, :version].include?(key)}
+          parameters.reject! { |key,value| value.nil?}
           config.reject! { |key,value| value.nil?}
           # Currently only support weblogic
-          config[:parameters][:type] = "weblogic"
-
+          parameters[:type] = "weblogic"
+          config[:parameters] = [parameters]
           body_data = config
 
-          request(
+          request({
             :method   => 'POST',
             :expects  => 202,
             :path     => "/paas/service/soa/api/v1.1/instances/#{@identity_domain}",
             :body     => Fog::JSON.encode(body_data),
-            #:headers  => {
-            # 'Content-Type'=>'application/vnd.com.oracle.oracloud.provisioning.Service+json'
-            #}
-          )
+            :headers  => {
+             'Content-Type'=>'application/json'
+            }
+          }, false)
         end
       end
 

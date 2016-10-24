@@ -6,7 +6,7 @@ module Fog
           request(
             :method   => 'DELETE',
             :expects  => 204,
-            :path     => "/v1/Storage-#{@identity_domain}/#{@username}/#{name}"
+            :path     => "/v1/Storage-#{@identity_domain}/#{name}"
           )
       	end
       end

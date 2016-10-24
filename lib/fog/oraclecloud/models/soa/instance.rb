@@ -41,6 +41,14 @@ module Fog
         attribute :force_delete
         attribute :skip_backup
 
+        def service_name=(value)
+          if value.include? '_' or !(value[0] =~ /[[:alpha:]]/) or value.size > 50 or !(value[/[a-zA-Z0-9_]+/]  == value)
+            raise ArgumentError, "Invalid service name. Names must be less than 50 characters; must start with a letter and can only contain letters, numbers and hyphens (-); can not end with a hyphen"
+          else
+            attributes[:service_name] = value
+          end
+        end
+
         def topology=(value)
           if %w(osb soa soaosb b2b mft apim insight).include? value then
             attributes[:topology]=value
@@ -66,6 +74,14 @@ module Fog
           end
         end
 
+        def admin_password=(value)
+          if !(value[0] =~ /[[:alpha:]]/) or value.size < 8 or value.size > 30 or !(value =~ /[_#$]/) or !(value =~ /[0-9]/)
+            raise ArgumentError, "Invalid admin password. Password must be between 8 and 30 characters in length; must start with a letter and can only contain letters, numbers and $, \#, _"
+          else
+            attributes[:admin_password] = value
+          end
+        end
+
         def save
           #identity ? update : create
           create
@@ -83,28 +99,46 @@ module Fog
           status == 'Stopped'
         end
 
-        def destroy
-          requires :service_name, :dba_name, :dba_password
+        def destroy(dba_name, dba_password)
+          requires :service_name
           service.delete_instance(service_name, dba_name, dba_password, 
                                             :force_delete => force_delete,
                                             :skip_backup => skip_backup).body
         end
 
+        def job_status
+          requires :creation_job_id
+          service.get_job_status('create', creation_job_id)
+        end
+
         private
 
         def create
-          requires :service_name, :dba_name, :dba_password, :db_service_name, :shape, :version, :ssh_key, :admin_password, :admin_username, :cloud_storage_container, :topology
+          requires :service_name, :dba_name, :dba_password, :db_service_name, :shape, :version, :ssh_key, :admin_password, :admin_username, :topology
 
           stor_user = cloud_storage_user || service.username
           stor_pwd = cloud_storage_pwd || service.password
 
+          if cloud_storage_container.nil? then
+            cloud_storage_container = "#{service_name}_Backup"
+            begin
+              container = Fog::Storage[:oraclecloud].containers.get(cloud_storage_container)
+            rescue Excon::Error::NotFound => error
+              # Doesn't exist, create it first
+              # The Oracle Cloud currently doesn't create a storage container for us, if it doesn't exist. Do it manually now
+              container = Fog::Storage[:oraclecloud].containers.create(
+                :name     => cloud_storage_container,
+              )
+            end
+          end
+
           params = {            
             :serviceName => service_name,
             :cloudStorageContainer => cloud_storage_container,
-            :cloudStoragePassword => cloud_storage_pwd,
-            :cloudStorageUser => cloud_storage_user,
+            :cloudStoragePassword => stor_pwd,
+            :cloudStorageUser => stor_user,
             :description => description,
-            :provisionOTD => provision_otd.nil? ? true : provision_otd,
+            :provisionOTD => provision_otd.nil? ? false : provision_otd,
             :subscriptionType => 'MONTHLY',
             :level => 'PAAS',
             :topology => topology

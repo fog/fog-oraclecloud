@@ -12,6 +12,7 @@ module Fog
       request :create_instance
       request :get_instance
       request :delete_instance
+      request :get_job_status
 
       class Real
 
@@ -23,6 +24,14 @@ module Fog
           Excon.ssl_verify_peer = false
 
           @connection = Fog::XML::Connection.new(region_url)
+        end
+
+        def username
+          @username
+        end
+
+        def password
+          @password
         end
 
       	def auth_header
@@ -66,7 +75,7 @@ module Fog
           @region_url = options[:oracle_region] == 'emea' ? 'https://jcs.emea.oraclecloud.com' : 'https://jaas.oraclecloud.com'
         end
 
-         def username
+        def username
           @username
         end
 
@@ -74,8 +83,7 @@ module Fog
           @password
         end
 
-
-       def self.data 
+        def self.data 
           @data ||= {
             :instances => {},
             :servers => {},

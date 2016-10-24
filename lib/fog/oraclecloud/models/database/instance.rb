@@ -52,6 +52,14 @@ module Fog
         attribute :golden_gate,       :aliases=>'goldenGate'
         attribute :usable_storage,  :aliases=>'usableStorage'
 
+        def service_name=(value)
+          if value.include? '_'
+            raise ArgumentError, "Invalid service name. Names must be less than 50 characters; must start with a letter and can only contain letters, numbers and hyphens (-); can not end with a hyphen"
+          else
+            attributes[:service_name] = value
+          end
+        end
+
         def edition=(value)
           if %w(SE EE EE_HP EE_EP).include? value then
             attributes[:edition]=value
@@ -141,6 +149,14 @@ module Fog
             attributes[:usable_storage]=value
           else
             raise ArgumentError, "Usable storage value is invalid: #{value.to_f}"
+          end
+        end
+
+        def admin_password=(value)
+          if !(value[0] =~ /[[:alpha:]]/) or value.size < 8 or value.size > 30 or !(value =~ /[_#$]/) or !(value =~ /[0-9]/)
+            raise ArgumentError, "Invalid admin password. Password must be between 8 and 30 characters in length; must start with a letter and can only contain letters, numbers and $, \#, _"
+          else
+            attributes[:admin_password] = value
           end
         end
 
@@ -274,9 +290,9 @@ module Fog
             :charset => charset,
             :backup_destination => backup_destination,
             :cloud_storage_container => stor_name,
-            :cloud_storage_pwd => stor_user,
-            :cloud_storage_user => stor_pwd,
-            :cloud_storage_if_missing => cloud_storage_if_missing,
+            :cloud_storage_pwd => stor_pwd,
+            :cloud_storage_user => stor_user,
+            :create_storage_container_if_missing => cloud_storage_if_missing,
             :disaster_recovery => disaster_recovery,
             :failover_database => failover_database,
             :golden_gate => golden_gate,
@@ -288,6 +304,26 @@ module Fog
             :usable_storage => usable_storage || 25
           }
           data = service.create_instance(params, options)
+          # Get the Job Id out of the header
+          self.creation_job_id = /status\/create\/job\/([0-9]*)/.match(data.headers['Location'])[1]
+        end
+
+        def reload
+          requires :identity
+          data = begin
+            collection.get(identity)
+          rescue Excon::Errors::SocketError
+            nil
+          rescue Excon::Errors::NotFound
+            # Try using the creation job id (maybe it was just created)
+            collection.get_from_job(creation_job_id)
+          end
+
+          return unless data
+
+          new_attributes = data.attributes
+          merge_attributes(new_attributes)
+          self
         end
       end
     end
