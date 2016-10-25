@@ -153,7 +153,7 @@ module Fog
         end
 
         def admin_password=(value)
-          if !(value[0] =~ /[[:alpha:]]/) or value.size < 8 or value.size > 30 or !(value =~ /[_#$]/) or !(value =~ /[0-9]/)
+          if !value.nil? and (!(value[0] =~ /[[:alpha:]]/) or value.size < 8 or value.size > 30 or !(value =~ /[_#$]/) or !(value =~ /[0-9]/))
             raise ArgumentError, "Invalid admin password. Password must be between 8 and 30 characters in length; must start with a letter and can only contain letters, numbers and $, \#, _"
           else
             attributes[:admin_password] = value

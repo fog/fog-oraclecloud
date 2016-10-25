@@ -1,7 +1,8 @@
 module Fog
   module OracleCloud
     class SOA < Fog::Service
-      requires :oracle_username, :oracle_password, :oracle_domain, :oracle_region
+      requires :oracle_username, :oracle_password, :oracle_domain
+      recognizes :oracle_region
 
       model_path	'fog/oraclecloud/models/soa'
       model				:instance

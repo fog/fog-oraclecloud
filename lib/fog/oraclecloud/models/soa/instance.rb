@@ -42,7 +42,7 @@ module Fog
         attribute :skip_backup
 
         def service_name=(value)
-          if value.include? '_' or !(value[0] =~ /[[:alpha:]]/) or value.size > 50 or !(value[/[a-zA-Z0-9_]+/]  == value)
+          if value.include? '_' or !(value[0] =~ /[[:alpha:]]/) or value.size > 50 or !(value[/[a-zA-Z0-9-]+/]  == value)
             raise ArgumentError, "Invalid service name. Names must be less than 50 characters; must start with a letter and can only contain letters, numbers and hyphens (-); can not end with a hyphen"
           else
             attributes[:service_name] = value
