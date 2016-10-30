@@ -155,6 +155,19 @@ module Fog
             :instances => {},
             :sshkeys => {},
             :orchestrations => {},
+            :image_lists => {
+              "/oracle/public/Oracle_Linux_7" => {
+                "name" => "/oracle/public/Oracle_Linux_7",
+                "default" => 1,
+                "description" => "Oracle Linux 7",
+                "entries" =>[{
+                  "attributes" => {},
+                  "version" => 1,
+                  "machineimages" => ["/oracle/public/OracleLinux7"],
+                  "uri" => "https://@api_endpoint:443/imagelist/oracle/public/OracleLinux7"
+                }]
+              }
+            },
             :deleted_at => {}
           }
         end

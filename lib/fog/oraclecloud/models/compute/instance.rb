@@ -53,7 +53,7 @@ module Fog
         end
 
         def create
-        	requires :name, :shape, :imagelist, :label, :sshkeys
+        	requires :name, :shape, :imagelist, :sshkeys
           
           data = service.create_instance(name, shape, imagelist, label, sshkeys)
           merge_attributes(data.body['instances'][0])

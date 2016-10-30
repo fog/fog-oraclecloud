@@ -11,9 +11,6 @@ module Fog
 	      attribute :description
 	      attribute :entries
 
-	      # Only used in create
-	      attribute :default
-
  				def save
           #identity ? update : create
           create

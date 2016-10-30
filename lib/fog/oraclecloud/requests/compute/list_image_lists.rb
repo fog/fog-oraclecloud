@@ -11,6 +11,19 @@ module Fog
           response
         end
       end
+
+      class Mock
+        def list_image_lists
+          response = Excon::Response.new
+
+          images = self.data[:image_lists].values
+
+          response.body = {
+            'result' => images
+          }
+          response
+        end
+      end
     end
   end
 end
