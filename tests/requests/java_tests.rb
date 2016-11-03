@@ -70,11 +70,13 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 		test "scale out a cluster" do
 			instance.scale_out_a_cluster('testcluster',true)
 			instance.wait_for { ready? }
+			instance.ready?
 		end
 
 		test "scale in a cluster" do
 			instance.scale_in_a_cluster('TestWLS_server_4')
 			instance.wait_for { ready? }
+			instance.ready?
 		end
 	end
 
