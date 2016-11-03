@@ -132,7 +132,14 @@ module Fog
           end
         end
 
-
+        def num_nodes=(value)
+          if value.nil? then value = 1 end
+          if [1, 2, 4, 8].include? value.to_i then
+            attributes[:num_nodes] = value.to_i
+          else
+            raise ArgumentError, "Invalid server count (#{value}). Valid values - 1, 2, 4 or 8"
+          end
+        end
 
         def initialize(attributes={})
           level ||= 'PAAS'
@@ -178,10 +185,9 @@ module Fog
           service.scale_in_a_cluster(service_name, server_name).body       
         end
 
-        def scale_a_node(server_name,shape)
-          requires :service_name
-          service.scale_a_node(service_name, server_name, :shape=>shape).body       
-        end
+        #def scale_a_node(shape)
+        #  service.scale_a_node(service_name, :shape=>shape).body       
+        #end
 
         private
 

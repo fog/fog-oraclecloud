@@ -14,7 +14,7 @@ module Fog
           }
           body_data = body_data.reject {|key, value| value.nil?}
 
- 		  response = request(
+ 		      response = request(
             :expects  => 202,
             :method   => 'PUT',
             :path     => path,
@@ -29,11 +29,19 @@ module Fog
       	  response = Excon::Response.new
 
           response.status = 202
+
+          self.data[:servers][service_name][server_name][:status] = 'Maintenance'
+          info = { 'time'=> Time.now }
+          if (options[:shape]) then
+            info['attribute'] = 'shape'
+            info['value'] = options[:shape]
+          end
+          self.data[:maintenance_at][server_name] = info
           response.body = {
             "status" => "New", 
             "details" => {
               "message" => "scaleup.job.submitted", 
-              "jobId" => "22"
+              "jobId" => rand(10000).to_s
             }
           }
           response

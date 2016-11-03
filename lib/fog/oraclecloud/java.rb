@@ -16,6 +16,7 @@ module Fog
       request :get_instance
       request :delete_instance
       request :list_servers
+      request :get_server
       request :scale_out_a_cluster
       request :scale_in_a_cluster
       request :scale_a_node
@@ -95,6 +96,7 @@ module Fog
           @data ||= {
             :instances => {},
             :servers => {},
+            :maintenance_at => {},
             :deleted_at => {},
             :created_at => {}
           }
