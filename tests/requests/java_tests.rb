@@ -61,25 +61,28 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 
 		test "should return an instance" do
 			instance.service_name.is_a? String
-			instance.wait_for{ ready? }
+			instance.ready?
 		end
 
 		test "scale out a cluster" do
 			data = instance.scale_out_a_cluster('testcluster',true)
-			data[:status]  == "New"
+			data['status']  == "New"
 			instance.wait_for { ready? }
+			instance.ready?
 		end
 
 		test "scale in a cluster" do
 			data = instance.scale_in_a_cluster('TestWLS_server_4')
-			data[:status] == "New"
+			data['status'] == "New"
 			instance.wait_for { ready? }
+			instance.ready?
 		end
 
 		test "scale a node" do
 			data = instance.scale_a_node('TestWLS_server_4','oc4')
-			data[:status] == "New"
+			data['status'] == "New"
 			instance.wait_for { ready? }
+			instance.ready?
 		end
 	end
 
