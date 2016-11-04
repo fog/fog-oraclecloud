@@ -59,22 +59,23 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 	tests('test jcs scaling ') do
 		instance = Fog::OracleCloud[:java].instances.get('TestWLS')
 
-		test "scale a node" do
-			instance.wait_for{ ready? }
-			instance.servers.first.scale('oc4')
-			instance.servers.first.wait_for { ready? }
-			instance.servers.first.ready?
-			instance.servers.first.shape == 'oc4'
-		end
-
 		test "scale out a cluster" do
-			instance.scale_out_a_cluster('testcluster',true)
+			instance.scale_out_a_cluster('testcluster',false)
 			instance.wait_for { ready? }
 			instance.ready?
 		end
 
+		test "scale a node" do
+			instance.ready? 
+			instance.servers.last.scale('oc4')
+			instance.servers.last.wait_for { ready? }
+			instance.servers.last.ready?
+			instance.servers.last.shape == 'oc4'
+		end
+
 		test "scale in a cluster" do
-			instance.scale_in_a_cluster('TestWLS_server_4')
+			instance.ready? 
+			instance.servers.last.scale_in_a_cluster
 			instance.wait_for { ready? }
 			instance.ready?
 		end

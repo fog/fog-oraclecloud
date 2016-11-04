@@ -36,6 +36,11 @@ module Fog
           service.scale_a_node(service_name, name, :shape=>shape)
         end
 
+        def scale_in_a_cluster
+          requires :service_name, :identity
+          service.scale_in_a_cluster(service_name, identity)
+        end
+
         def reload
           requires :identity, :service_name
 

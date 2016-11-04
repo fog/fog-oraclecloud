@@ -7,7 +7,7 @@ module Fog
  					response = request(
             :expects  => 200,
             :method   => 'GET',
-            :path     => "/paas/service/jcs/api/v1.1/instances/#{@identity_domain}/#{service_name}/#{server_name}"
+            :path     => "/paas/service/jcs/api/v1.1/instances/#{@identity_domain}/#{service_name}/servers/#{server_name}"
           )
           response
         end
