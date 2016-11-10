@@ -14,8 +14,8 @@ module Fog
         end
 
         def get(service_name, server_name)
-          data = service.get_server(service_name, server_name).body
-          data['service_name'] = service_name
+          data = service.get_server(service_name, server_name).body['servers'].first
+          data['service_name'] = service_name          
           new(data)
         end
 

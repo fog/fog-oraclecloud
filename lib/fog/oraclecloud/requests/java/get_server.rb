@@ -27,8 +27,11 @@ module Fog
                 self.data[:maintenance_at].delete(server_name)
               end
             end
-            response.status = 200
-            response.body = server
+            
+            response.status = 200           
+            response.body =  {
+              'servers' => self.data[:servers][service_name].values
+            }
             response
           else
             raise Fog::OracleCloud::Java::NotFound.new("Java Server #{name} does not exist");

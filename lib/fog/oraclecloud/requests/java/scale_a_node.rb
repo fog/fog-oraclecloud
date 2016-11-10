@@ -29,14 +29,8 @@ module Fog
       	  response = Excon::Response.new
 
           response.status = 202
-
-          self.data[:servers][service_name][server_name][:status] = 'Maintenance'
-          info = { 'time'=> Time.now }
-          if (options[:shape]) then
-            info['attribute'] = 'shape'
-            info['value'] = options[:shape]
-          end
-          self.data[:maintenance_at][server_name] = info
+          self.data[:servers][service_name][server_name][:status] = 'Ready'
+          self.data[:servers][service_name][server_name][:shape] = options[:shape]
           response.body = {
             "status" => "New", 
             "details" => {
