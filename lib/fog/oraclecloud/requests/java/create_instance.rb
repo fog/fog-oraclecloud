@@ -75,7 +75,8 @@ module Fog
             "storageAllocated": 74752,
             "creationDate": Time.now.strftime('%Y-%b-%dT%H:%M:%S')
           }
-          self.data[:servers][data['serviceName']] = [server]
+          self.data[:servers][data['serviceName']] = {}
+          self.data[:servers][data['serviceName']][server[:name]] = server
 
           response.status = 202
           response

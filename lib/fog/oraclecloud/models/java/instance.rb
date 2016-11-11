@@ -123,14 +123,6 @@ module Fog
           end
         end
 
-        def num_nodes=(value)
-          if value.nil? then value = 1 end
-          if [1, 2, 4, 8].include? value.to_i then
-            attributes[:num_nodes] = value.to_i
-          else
-            raise ArgumentError, "Invalid server count (#{value}). Valid values - 1, 2, 4 or 8"
-          end
-        end
 
         def shape=(value)
           if %w(oc3 oc4 oc5 oc6 oc1m oc2m oc3m oc4m).include? value then
@@ -140,7 +132,14 @@ module Fog
           end
         end
 
-
+        def num_nodes=(value)
+          if value.nil? then value = 1 end
+          if value.to_i.is_a? Integer then
+            attributes[:num_nodes] = value.to_i
+          else
+            raise ArgumentError, "Invalid server count (#{value}). Valid values - 1, 2, 4 or 8"
+          end
+        end
 
         def initialize(attributes={})
           level ||= 'PAAS'
@@ -174,6 +173,11 @@ module Fog
 		    def destroy
           requires :service_name, :dba_name, :dba_password
           service.delete_instance(service_name, dba_name, dba_password, :force_delete => force_delete).body
+        end
+
+        def scale_out_a_cluster(cluster_name, create_cluster_if_missing)
+          requires :service_name
+          service.scale_out_a_cluster(service_name, cluster_name, create_cluster_if_missing).body
         end
 
         private
