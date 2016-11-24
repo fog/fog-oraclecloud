@@ -1,7 +1,7 @@
 require 'pp'
 
 Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
-	
+
 	tests("#java-create", "create") do
 		instance = Fog::OracleCloud[:java].instances.create(
 			:service_name => 'TestWLS',
@@ -28,7 +28,7 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 			instance.ready?
 		end
 	end
-
+=begin
 	tests('#java-read') do
 		instances = Fog::OracleCloud[:java].instances
 		test "returns an Array" do
@@ -94,7 +94,64 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
   	end
   
   end
-	
+=end
+
+	tests('test jcs backup and restoration') do	 
+    test_service_name = 'TestWLS'    
+    #test_service_name = 'dengJCS'    
+ 
+    instance = Fog::OracleCloud[:java].instances.get(test_service_name)
+    if !instance.ready? 
+      puts 'wait for ready....'
+      Fog::OracleCloud[:java].instances.get(test_service_name).wait_for(1800) { ready? }
+    end
+    
+    # Create a backup   
+    response = instance.backup()
+    test "should start backup" do
+      response.body['operationName'].eql?('start-backup')
+    end
+    Fog::OracleCloud[:java].instances.get(test_service_name).wait_for(1800) { ready? }
+    Fog::OracleCloud[:java].instances.get(test_service_name).ready?
+   
+    backups = instance.backups  
+    test "returns an Array" do    
+      backups.is_a? Array
+	  end  
+    test "should return records" do
+      backups.size >= 1
+    end   
+    
+	  backup = backups.get(test_service_name,backups.first.backup_id)
+	  test "should return a backup" do
+      backup.status.is_a? String
+    end    
+
+    # Create a restoration
+    test_backup_id = backups.first.backup_id
+    response = instance.restoration(test_backup_id, :forceScaleIn => true)
+    test "should start restoration" do
+      response.body['operationName'].eql?('restore-backup')
+    end
+    Fog::OracleCloud[:java].instances.get(test_service_name).wait_for(1800) { ready? }
+    Fog::OracleCloud[:java].instances.get(test_service_name).ready?
+  
+    restorations = instance.restorations  
+    test "returns an Array" do    
+      restorations.is_a? Array
+    end  
+    test "should return records" do
+      restorations.size >= 1
+    end 
+    
+    restoration = restorations.get(test_service_name,restorations.first.job_id)
+    test "should return a restoration" do
+      restoration.status.is_a? String
+    end 
+
+	end
+
+=begin
 	tests("#java-delete", "create") do
 		instance = Fog::OracleCloud[:java].instances.get('TestWLS')
 		instance.dba_name = 'Admin',
@@ -105,6 +162,6 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 			instance.wait_for { stopped? } 
 		end
 	end
-
+=end
 
 end
