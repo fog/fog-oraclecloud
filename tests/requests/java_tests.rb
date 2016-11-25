@@ -28,7 +28,7 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 			instance.ready?
 		end
 	end
-=begin
+
 	tests('#java-read') do
 		instances = Fog::OracleCloud[:java].instances
 		test "returns an Array" do
@@ -94,11 +94,9 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
   	end
   
   end
-=end
 
 	tests('test jcs backup and restoration') do	 
     test_service_name = 'TestWLS'    
-    #test_service_name = 'dengJCS'    
  
     instance = Fog::OracleCloud[:java].instances.get(test_service_name)
     if !instance.ready? 
@@ -151,7 +149,6 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 
 	end
 
-=begin
 	tests("#java-delete", "create") do
 		instance = Fog::OracleCloud[:java].instances.get('TestWLS')
 		instance.dba_name = 'Admin',
@@ -162,6 +159,5 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 			instance.wait_for { stopped? } 
 		end
 	end
-=end
 
 end

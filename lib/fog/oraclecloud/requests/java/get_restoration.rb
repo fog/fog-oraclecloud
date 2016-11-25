@@ -16,15 +16,17 @@ module Fog
         def get_restoration(service_name, job_id)
           response = Excon::Response.new
           
-          if restoration = self.data[:restorations].first    
-            response.status = 200           
-            response.body =  restoration
-            
-            response
-          else
-            raise Fog::OracleCloud::Java::NotFound.new("Java Server #{name} does not exist");
-          end
-         
+          restoration = {}
+          self.data[:restorations].each_with_index{ |r,i|
+            if r['jobId'].eql?(job_id)
+              restoration = self.data[:restorations][i]
+            end 
+          }
+           
+          response.status = 200           
+          response.body =  restoration
+          response
+       
         end
       end
     end

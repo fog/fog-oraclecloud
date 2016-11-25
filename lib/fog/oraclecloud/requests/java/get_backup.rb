@@ -16,13 +16,17 @@ module Fog
         def get_backup(service_name, backup_id)
           response = Excon::Response.new
           
-          if backup = self.data[:backups].first       
-            response.status = 200           
-            response.body =  backup
-            response
-          else
-            raise Fog::OracleCloud::Java::NotFound.new("Java Server #{name} does not exist");
-          end
+          backup = {}
+          self.data[:backups].each_with_index { |r, i| 
+            if r['backupId'].eql?(backup_id)
+              backup = self.data[:backups][i]
+            end
+          }
+              
+          response.status = 200           
+          response.body =  backup
+          response
+          
         end
       end
     end
