@@ -76,6 +76,15 @@ The following services are supported:
   * get_server
   * list_instances
   * list_servers
+  * scale_in_a_cluster
+  * scale_out_a_cluster
+  * scale_a_node
+  * list_backups
+  * get_backup
+  * backup_instance
+  * list_restorations
+  * get_restoration
+  * restoration_instance
 * SOA Cloud Service
   * create_instance
   * delete_instance
