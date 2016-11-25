@@ -169,7 +169,26 @@ module Fog
         def servers
           service.servers.all(service_name)
         end
-				
+
+        def backup
+          requires :service_name
+          service.backup_instance(service_name)
+        end
+        
+        def backups
+          service.backups.all(service_name)  
+        end
+        
+        def restoration(backup_id, options)
+          requires :service_name
+          service.restoration_instance(service_name, backup_id, options)
+        end
+
+        def restorations
+          requires :service_name
+          service.restorations.all(service_name)
+        end
+        
 		    def destroy
           requires :service_name, :dba_name, :dba_password
           service.delete_instance(service_name, dba_name, dba_password, :force_delete => force_delete).body

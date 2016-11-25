@@ -9,6 +9,10 @@ module Fog
       collection	:instances
       model       :server
       collection  :servers
+      model       :backup
+      collection  :backups
+      model       :restoration
+      collection  :restorations
 
 			request_path 'fog/oraclecloud/requests/java'
       request :list_instances
@@ -20,7 +24,13 @@ module Fog
       request :scale_out_a_cluster
       request :scale_in_a_cluster
       request :scale_a_node
-
+      request :backup_instance
+      request :list_backups
+      request :get_backup
+      request :restoration_instance
+      request :list_restorations
+      request :get_restoration
+            
       class Real
 
       	def initialize(options={})
@@ -96,6 +106,8 @@ module Fog
           @data ||= {
             :instances => {},
             :servers => {},
+            :backups => {},
+            :restorations => {},
             :maintenance_at => {},
             :deleted_at => {},
             :created_at => {}
