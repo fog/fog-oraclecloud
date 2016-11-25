@@ -5,11 +5,11 @@ module Fog
 
       	def backup_instance(service_name, options={})
           # Oracle Cloud requires an empty JSON object in the body
-          body_data     = {
-            'databaseIncluded'             => options[:databaseIncluded],
+          body_data = {
+            'databaseIncluded' => options[:databaseIncluded],
             'expirationDate' => options[:expirationDate],
             'full' =>  options[:full],
-            'notes'             => options[:notes]
+            'notes' => options[:notes]
           }
           body_data = body_data.reject {|key, value| value.nil?}
         

@@ -4,13 +4,13 @@ module Fog
       class Real
 
       	def restoration_instance(service_name, backup_id, options={})
-          body_data     = {
+          body_data = {
             'backupId' => backup_id,
-            'forceScaleIn' => options[:forceScaleIn],           
-            'notes'             => options[:notes], 
-            'pauseOTD' =>  options[:pauseOTD],
-            'resetBinaries' =>  options[:resetBinaries],
-            'restoreConfig' =>  options[:restoreConfig]
+            'forceScaleIn' => options[:forceScaleIn],
+            'notes' => options[:notes], 
+            'pauseOTD' => options[:pauseOTD],
+            'resetBinaries' => options[:resetBinaries],
+            'restoreConfig' => options[:restoreConfig]
           }
           body_data = body_data.reject {|key, value| value.nil?}
         
@@ -45,7 +45,7 @@ module Fog
           response.status = 202 
           response.body={
             'operationName'=>'restore-backup'
-          }         
+          }
           response
       	end
       end

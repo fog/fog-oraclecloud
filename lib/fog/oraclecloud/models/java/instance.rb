@@ -169,17 +169,17 @@ module Fog
         def servers
           service.servers.all(service_name)
         end
-				
-				def backup
+
+        def backup
           requires :service_name
           service.backup_instance(service_name)
         end
         
-				def backups
-				  service.backups.all(service_name)  
-				end
-				
-				def restoration(backup_id, options)
+        def backups
+          service.backups.all(service_name)  
+        end
+        
+        def restoration(backup_id, options)
           requires :service_name
           service.restoration_instance(service_name, backup_id, options)
         end
