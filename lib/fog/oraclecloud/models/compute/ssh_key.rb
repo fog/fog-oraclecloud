@@ -23,7 +23,7 @@ module Fog
 
         def update
         	requires :enabled, :name, :key, :uri
-        	data = service.update_ssh_key(name, enabled, key)
+        	data = service.update_ssh_key(uri, name, enabled, key)
         	merge_attributes(data.body)
         end
 

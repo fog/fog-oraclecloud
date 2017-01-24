@@ -78,6 +78,75 @@ module Fog
           self.data[:servers][data['serviceName']] = {}
           self.data[:servers][data['serviceName']][server[:name]] = server
 
+
+          # Add default access rules
+          access_rules = [{
+            "ruleName" => "sys_ms2db_dblistener",
+            "description"=> "DO NOT MODIFY=> Permit listener connection to database from managed servers",
+            "status"=> "enabled",
+            "source"=> "WLS_MANAGED_SERVER",
+            "destination"=> "dbaas=>nbnws=>DB",
+            "ports"=> "1521",
+            "protocol"=> "tcp",
+            "ruleType"=> "SYSTEM"
+          },{
+            "ruleName"=> "sys_ms2db_ssh",
+            "description"=> "DO NOT MODIFY=> Permit managed servers to ssh to db",
+            "status"=> "enabled",
+            "source"=> "WLS_MANAGED_SERVER",
+            "destination"=> "dbaas=>nbnws=>DB",
+            "port"=> "22",
+            "portocol"=> "tcp",
+            "ruleType"=> "SYSTEM"
+          },{
+            "ruleName"=> "ora_p2admin_ssh",
+            "description"=> "DO NOT MODIFY=> Permit public ssh to admin server",
+            "status"=> "enabled",
+            "source"=> "PUBLIC-INTERNET",
+            "destination"=> "WLS_ADMIN_SERVER",
+            "port"=> "22",
+            "portocol"=> "tcp",
+            "ruleType"=> "DEFAULT"
+          },{
+            "ruleName"=> "ora_p2admin_ahttps",
+            "description"=> "DO NOT MODIFY=> Permit public to https to admin server",
+            "status"=> "enabled",
+            "source"=> "PUBLIC-INTERNET",
+            "destination"=> "WLS_ADMIN_SERVER",
+            "port"=> "7002",
+            "portocol"=> "tcp",
+            "ruleType"=> "DEFAULT"
+          },{
+            "ruleName"=> "sys_infra2admin_ssh",
+            "description"=> "DO NOT MODIFY=> Permit PSM to ssh to admin server",
+            "status"=> "enabled",
+            "source"=> "PAAS-INFRA",
+            "destination"=> "WLS_ADMIN_SERVER",
+            "port"=> "22",
+            "portocol"=> "tcp",
+            "ruleType"=> "DEFAULT"
+          },{
+            "ruleName"=> "ora_p2ms_chttp",
+            "description"=> "Permit http connection to managed servers from public",
+            "status"=> "enabled",
+            "source"=> "PUBLIC-INTERNET",
+            "destination"=> "WLS_ADMIN_SERVER",
+            "port"=> "80",
+            "portocol"=> "tcp",
+            "ruleType"=> "DEFAULT"
+          },{
+            "ruleName"=> "ora_p2ms_chttps",
+            "description"=> "Permit https connection to managed servers from public",
+            "status"=> "enabled",
+            "source"=> "PUBLIC-INTERNET",
+            "destination"=> "WLS_MANAGED_SERVER",
+            "port"=> "443",
+            "portocol"=> "tcp",
+            "ruleType"=> "DEFAULT"
+          }]
+
+          self.data[:access_rules][data['serviceName']] = access_rules
+
           response.status = 202
           response
         end

@@ -29,6 +29,13 @@ Shindo.tests('Fog::Compute[oraclecloud] | instance requests', 'instances') do
 		test "is built" do
 			new_instance.state == 'running'
 		end
+
+		test "can create with minimum attributes" do
+			min_instance = Fog::Compute[:oraclecloud].instances.create
+			min_instance.is_a? Fog::Compute::OracleCloud::Instance
+			min_instance.wait_for { ready? }
+			min_instance.state == 'running'
+		end
 	end
 
 	tests('#instances-read') do

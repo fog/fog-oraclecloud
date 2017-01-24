@@ -9,6 +9,8 @@ module Fog
       collection	:instances
       model       :server
       collection  :servers
+      model       :access_rule
+      collection  :access_rules
 
 			request_path 'fog/oraclecloud/requests/java'
       request :list_instances
@@ -20,6 +22,11 @@ module Fog
       request :scale_out_a_cluster
       request :scale_in_a_cluster
       request :scale_a_node
+
+      request :list_access_rules
+      request :create_access_rule
+      request :delete_access_rule
+      request :enable_access_rule
 
       class Real
 
@@ -96,6 +103,7 @@ module Fog
           @data ||= {
             :instances => {},
             :servers => {},
+            :access_rules => {},
             :maintenance_at => {},
             :deleted_at => {},
             :created_at => {}

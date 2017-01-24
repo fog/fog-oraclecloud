@@ -169,6 +169,10 @@ module Fog
         def servers
           service.servers.all(service_name)
         end
+
+        def access_rules
+          service.access_rules(:instance => self)
+        end
 				
 		    def destroy
           requires :service_name, :dba_name, :dba_password

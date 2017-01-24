@@ -2,7 +2,7 @@ module Fog
   module Compute
     class OracleCloud
       class Real
-      	def update_ssh_key (name, enabled, key)
+      	def update_ssh_key (uri, name, enabled, key)
           if !name.start_with?("/Compute-") then
             # They haven't provided a well formed name, add their name in
             name = "/Compute-#{@identity_domain}/#{@username}/#{name}"
@@ -26,7 +26,7 @@ module Fog
       end
 
       class Mock
-        def update_ssh_key (name, enabled, key)
+        def update_ssh_key (uri, name, enabled, key)
           response = Excon::Response.new
           clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
           if sshkey = self.data[:sshkeys][clean_name] 

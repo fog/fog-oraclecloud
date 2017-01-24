@@ -38,16 +38,16 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 		test "should return records" do
 			instances.size >= 1
 		end
-
+#
 		test "should return a valid name" do
 			instances.first.service_name.is_a? String
 		end
-
+#
 		instance = Fog::OracleCloud[:java].instances.get(instances.first.service_name)
 		test "should return an instance" do
 			instance.service_name.is_a? String
 		end
-
+#
 		servers = instance.servers
 		test "should have compute nodes" do
 			servers.is_a? Array
@@ -56,7 +56,7 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
 		end
 	end
 
-	tests('test jcs scaling ') do
+	tests('test jcs scaling', 'create') do
 	  scale_out_server_name = 'TestWLS_server_1'
     test_service_name = 'TestWLS'
  
@@ -93,6 +93,46 @@ Shindo.tests('Fog::Java[oraclecloud] | java requests', 'java') do
   		Fog::OracleCloud[:java].instances.get(test_service_name).ready?
   	end
   
+  end
+
+  tests("#java-access-rules") do
+  	instance = Fog::OracleCloud[:java].instances.first
+
+  	test "list access rules" do
+  		rules = instance.access_rules
+  		rules.is_a? Array
+  		!rules.first.rule_name.nil?
+  	end
+
+  	rule_name = "my_corp_vnc_#{rand(100)}"
+  	test "create access rule" do
+  		rule = instance.access_rules.create({
+  			:rule_name => rule_name,
+  			:description => 'Corporate VNC to Admin Server',
+  			:ports => '5900',
+  			:protocol => 'tcp',
+  			:status => 'disabled',
+  			:source => '192.123.45.6/32',
+  			:destination => 'WLS_ADMIN_SERVER'
+  		})
+  		rule.is_a? Fog::OracleCloud::Java::AccessRule
+  		rule.status == 'disabled'
+  	end
+
+  	test "enable access rule" do
+  		rule = instance.access_rules.get(rule_name)
+  		rule.enable()
+  		rule.status == 'enabled'
+  	end
+
+  	test "delete access rule" do
+  		rule = instance.access_rules.get(rule_name)
+  		rule.destroy()
+			tests("should delete key").raises(Fog::OracleCloud::Java::NotFound) do
+				rule = instance.access_rules.get(rule_name)
+			end
+  	end
+
   end
 	
 	tests("#java-delete", "create") do

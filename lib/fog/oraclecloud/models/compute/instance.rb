@@ -39,6 +39,11 @@ module Fog
 	      attribute :virtio
 	      attribute :vnc 
 
+	      def initialize(attributes={})
+	      	self.shape ||= 'oc3'
+	      	super
+	      end
+
 	      def ready?
 	      	state == 'running'
 	      end
