@@ -33,6 +33,9 @@ module Fog
       model :volume
       collection :volumes
 
+      model :ip_reservation
+      collection :ip_reservations
+
 			request_path 'fog/oraclecloud/requests/compute'
      	request :list_security_applications
      	request :create_security_application
@@ -78,6 +81,13 @@ module Fog
 
       request :list_volumes
       request :create_volume
+
+      request :list_ip_reservations
+      request :get_ip_reservation
+      request :create_ip_reservation
+      request :delete_ip_reservation
+      request :update_ip_reservation
+
 
 			class Real
 
@@ -126,11 +136,13 @@ module Fog
 					rescue Excon::Errors::HTTPStatusError => error
 						raise case error
 						when Excon::Errors::NotFound
+              puts "not found"
 							Fog::Compute::OracleCloud::NotFound.slurp(error)
 						when Excon::Errors::Conflict
 							data = Fog::JSON.decode(error.response.body)
 							raise Error.new(data['message'])
 						else
+              puts "else"
 							error
 						end
 					end
@@ -155,6 +167,7 @@ module Fog
             :instances => {},
             :sshkeys => {},
             :orchestrations => {},
+            :ip_reservations => {},
             :image_lists => {
               "/oracle/public/Oracle_Linux_7" => {
                 "name" => "/oracle/public/Oracle_Linux_7",
