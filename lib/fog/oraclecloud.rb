@@ -19,11 +19,13 @@ module Fog
     autoload :Java, File.expand_path('../oraclecloud/java', __FILE__)
     autoload :Database, File.expand_path('../oraclecloud/database', __FILE__)
     autoload :SOA, File.expand_path('../oraclecloud/soa', __FILE__)
+    autoload :Monitoring, File.expand_path('../oraclecloud/monitoring', __FILE__)
 
   	service(:compute, 'Compute')
   	service(:storage, 'Storage')
     service(:java, 'Java')
     service(:database, 'Database')
     service(:soa, 'SOA')
+    service(:monitoring, 'Monitoring')
   end
 end

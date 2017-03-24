@@ -35,6 +35,11 @@ module Fog
 
       model :ip_reservation
       collection :ip_reservations
+      model :ip_network
+      collection :ip_networks
+
+      model :storage_attachment
+      collection :storage_attachments
 
 			request_path 'fog/oraclecloud/requests/compute'
      	request :list_security_applications
@@ -88,6 +93,14 @@ module Fog
       request :delete_ip_reservation
       request :update_ip_reservation
 
+      request :list_ip_networks
+      request :get_ip_network
+      request :create_ip_network
+      request :delete_ip_network
+
+      request :list_storage_attachments
+      request :get_storage_attachment
+      request :create_storage_attachment
 
 			class Real
 
@@ -168,6 +181,8 @@ module Fog
             :sshkeys => {},
             :orchestrations => {},
             :ip_reservations => {},
+            :ip_networks => {},
+            :storage_attachments => {},
             :image_lists => {
               "/oracle/public/Oracle_Linux_7" => {
                 "name" => "/oracle/public/Oracle_Linux_7",
