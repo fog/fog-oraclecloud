@@ -29,7 +29,7 @@ module Fog
             response.body = container
             response
           else;
-            raise Fog::Compute::OracleCloud::NotFound.new("Storage Container #{name} does not exist");
+            raise Excon::Error::NotFound.new("Storage Container #{name} does not exist");
           end
         end
 
