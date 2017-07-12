@@ -209,6 +209,16 @@ module Fog
           service.scale_instance(service_name, :additional_storage=>size, :usage=>type).body
         end
 
+        def add_rule(port, ip, rule_name=nil)
+          if !rule_name then rule_name = "#{service_name}_#{port}_#{ip}" end
+          begin
+            rule = service.access_rules.get(service_name, rule_name)
+          rescue Fog::OracleCloud::Database::NotFound    
+            Fog::Logger.debug "Add access rule (#{rule_name}) to (#{service_name}) on port #{port}"
+            rule = service.access_rules.create(service_name, :ports=>port, :source=>ip, :destination=>'DB', :ruleName=>rule_name)
+          end
+        end
+
         def snapshots
           requires :service_name
           service.snapshots.all(service_name)
@@ -258,8 +268,11 @@ module Fog
         private
 
         def create
-          requires :service_name, :edition, :ssh_key, :shape, :version, :admin_password, :backup_destination
+          requires :service_name, :ssh_key, :admin_password
 
+          if backup_destination.nil? then
+            backup_destination = 'NONE'
+          end
           if backup_destination != 'NONE' then
             if cloud_storage_container.nil? then
               cloud_storage_if_missing = true
@@ -277,10 +290,10 @@ module Fog
 
           params = {
             :service_name => service_name,
-            :edition => edition,
+            :edition => edition || 'SE',
             :ssh_key => ssh_key,
-            :shape => shape,
-            :version => version,
+            :shape => shape || 'oc3',
+            :version => version || '12.2.0.1',
             :level => level || 'PAAS',
             :subscription_type => subscription_type || 'HOURLY',
             :description => description

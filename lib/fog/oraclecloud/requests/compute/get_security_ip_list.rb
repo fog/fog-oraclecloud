@@ -2,12 +2,13 @@ module Fog
   module Compute
     class OracleCloud
       class Real
-				def get_ip_network(name)
+				def get_security_ip_list(name)
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
+
  					response = request(
             :expects  => 200,
             :method   => 'GET',
-            :path     => "/network/v1/ipnetwork/Compute-#{@identity_domain}/#{@username}/#{name}",
+            :path     => "/seciplist/Compute-#{@identity_domain}/#{@username}/#{name}",
             :headers  => {
               'Content-Type' => 'application/oracle-compute-v3+json',
               'Accept' => 'application/oracle-compute-v3+json'
@@ -18,16 +19,16 @@ module Fog
       end
 
       class Mock
-        def get_ip_network(name)
+        def get_security_ip_list(name)
           response = Excon::Response.new
           clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
 
-          if ip = self.data[:ip_networks][clean_name] 
+          if instance = self.data[:security_ip_lists][clean_name] 
             response.status = 200
-            response.body = ip
+            response.body = instance
             response
-          else;
-            raise Fog::Compute::OracleCloud::NotFound.new("IP Network #{name} does not exist");
+          else
+            raise Fog::Compute::OracleCloud::NotFound.new("Security IP List #{name} does not exist");
           end
         end
       end

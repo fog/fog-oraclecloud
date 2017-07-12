@@ -16,14 +16,18 @@ module Fog
 	      attribute :used
 
  				def save
- 					if !name.nil? && !name.start_with?("/Compute-") then
-	          create
-	         else
-	         	update
-	        end
+          begin
+            # Check if it's already created
+            res = Fog::Compute[:oraclecloud].ip_reservations.get(name)
+            update
+          rescue Fog::Compute::OracleCloud::NotFound    
+            # It wasn't found. 
+            create
+          end
         end
 
         def create 
+          requires :name
           data = service.create_ip_reservation({
           	:name => name,
           	:parentpool => parentpool || '/oracle/public/ippool', 
@@ -34,6 +38,7 @@ module Fog
         end
 
         def update
+          requires :name, :parentpool
         	data = service.update_ip_reservation({
         		:name => name,
         		:parentpool => parentpool,

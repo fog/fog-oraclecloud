@@ -24,6 +24,28 @@ module Fog
           )
       	end
       end
+      class Mock
+        def create_security_rule(name, src_list, dst_list, application, action, options={})
+          response = Excon::Response.new
+          name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
+
+          data = {
+            'name'                => "/Compute-#{@identity_domain}/#{@username}/#{name}",
+            'src_list'            => src_list,
+            'dst_list'            => dst_list,
+            'application'         => application,
+            'action'              => action,
+            'description'         => options[:description],
+            'disabled'            => options[:disabled],
+            'uri'                 => "#{@api_endpoint}secrule/#{name}"
+          }
+          self.data[:security_rules][name] = data
+
+          response.status = 201
+          response.body = self.data[:security_rules][name]
+          response
+        end
+      end
     end
   end
 end

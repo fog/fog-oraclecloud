@@ -29,8 +29,8 @@ module Fog
       	end
 
       	def authenticate()
-
       		begin
+            Fog::Logger.debug("Sending #{params[:body].to_s} to #{params[:path]}")
             response = @connection.request({
             	:expects  => 200,
           	  :method   => 'GET',

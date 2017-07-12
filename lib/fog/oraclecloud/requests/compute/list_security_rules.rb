@@ -13,7 +13,7 @@ module Fog
       end
 
       class Mock
-        def list_security_applications
+        def list_security_rules
         end
       end
     end

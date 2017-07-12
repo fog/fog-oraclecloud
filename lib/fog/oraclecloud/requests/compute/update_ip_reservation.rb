@@ -5,6 +5,8 @@ module Fog
     class OracleCloud
       class Real
       	def update_ip_reservation (params) 
+          params[:name].sub! "/Compute-#{@identity_domain}/#{@username}/", ''
+          params[:name] = "/Compute-#{@identity_domain}/#{@username}/#{params[:name]}"
           params = params.reject {|key, value| value.nil?}
           request(
             :method   => 'PUT',

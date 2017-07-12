@@ -40,8 +40,8 @@ module Fog
       	end
 
         def request(params, parse_json = true, &block)
-
 					begin
+            Fog::Logger.debug("Sending #{params[:body].to_s} to #{params[:path]}")
 						response = @connection.request(params.merge!({
 							:headers  => {
 								'Authorization' => auth_header,

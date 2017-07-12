@@ -1,5 +1,3 @@
-require 'fog/core/collection'
-
 module Fog
   module Compute
   	class OracleCloud
@@ -9,6 +7,12 @@ module Fog
 				
 				def all
 					data = service.list_security_applications().body['result']
+					public_data = service.list_security_applications('public').body['result']
+					load(data.concat(public_data))
+				end
+
+				def all_public
+					data = service.list_security_applications('public').body['result']
 					load(data)
 				end
 

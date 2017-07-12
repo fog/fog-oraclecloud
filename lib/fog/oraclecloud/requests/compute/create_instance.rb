@@ -39,7 +39,40 @@ module Fog
             'imagelist' => imagelist,
             'label' => label,
             'sshkeys' => sshkeys,
-            'state' => 'running'
+            'state' => 'running',
+            'account' => "/Compute-#{@identity_domain}/default",
+            'boot_order' => [],
+            'disk_attach' => '',
+            'domain' => "compute-#{@identity_domain}.oraclecloud.internal",
+            'entry' => 1,
+            'error_reason' => '',
+            'hostname' => "mock.compute-#{@identity_domain}.oraclecloud.internal",
+            'hypervisor' => {"mode"=>"hvm"},
+            'image_format' => 'raw',
+            'ip' => '127.0.0.1',
+            'networking'=> {
+              "eth0"=>{
+                "model"=>"", 
+                "seclists"=>["/Compute-#{@identity_domain}/default/default"], 
+                "dns"=>["mock.compute-#{@identity_domain}.oraclecloud.internal."], 
+                "vethernet"=>"/oracle/public/default",
+                "nat"=>nil
+              }
+            },
+            'placement_requirement' => ["/system/compute/placement/default", "/system/compute/allow_instances"],
+            'platform' => 'linux', # Probably? Don't rely on this in mock
+            'priority' => '/oracle/public/default',
+            'quota' => "/Compute-#{@identity_domain}",
+            'quota_reservation' => nil,
+            'resolvers' => nil,
+            'reverse_dns' => true,
+            'site' => '',
+            'storage_attachments' => [],
+            'tags' => [],
+            'uri'=>"#{@api_endpoint}/instance/Compute-#{@identity_domain}/#{@username}/#{name}",
+            'vcable_id'=>"/Compute-#{@identity_domain}/#{@username}/", # TODO: add random id
+            'virtio'=>nil,
+            'vnc'=>'127.0.0.1:5900'
           }
           response.status = 201
           response.body = {

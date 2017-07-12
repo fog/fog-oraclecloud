@@ -17,6 +17,8 @@ module Fog
       collection  :servers
       model       :patch
       collection  :patches
+      model       :access_rule
+      collection  :access_rules
 
 			request_path 'fog/oraclecloud/requests/database'
       request :list_instances
@@ -35,6 +37,8 @@ module Fog
       request :backup_instance
       request :recover_instance
       request :list_patches
+      request :create_access_rule
+      request :get_access_rule
 
       class Real
 
@@ -62,6 +66,7 @@ module Fog
 
         def request(params, parse_json = true, &block)
           begin
+            Fog::Logger.debug("Sending #{params[:body].to_s} to #{params[:path]}")
             response = @connection.request(params.merge!({
               :headers  => {
                 'Authorization' => auth_header,
@@ -109,6 +114,7 @@ module Fog
             :snapshots  => {},
             :servers    => {},
             :backups    => {},
+            :access_rules => {},
             :recoveries => {},
             :deleted_at => {},
             :created_at => {},

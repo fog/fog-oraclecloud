@@ -7,7 +7,6 @@ module Fog
 	      identity  :name
 
 	      attribute :dst_list
-	      attribute :name
 	      attribute :src_list
 	      attribute :uri
 	      attribute :disabled
@@ -24,11 +23,12 @@ module Fog
         end
 
 				def create
-        	requires :name, :src_list, :dst_list, :application, :action
+        	requires :name, :src_list, :dst_list, :application
           
-          data = service.create_security_rule(name, src_list, dst_list, application, action,
+          data = service.create_security_rule(name, src_list, dst_list, application, 'PERMIT',
                                             :description => description,
                                             :disabled => disabled)
+          merge_attributes(data.body)
         end
 
         def destroy

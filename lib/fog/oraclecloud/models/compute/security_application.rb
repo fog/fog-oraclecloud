@@ -30,6 +30,7 @@ module Fog
                                             :icmptype => icmptype,
                                             :icmpcode => icmpcode,
                                             :description => description)
+          merge_attributes(data.body)
         end
 
         def destroy
