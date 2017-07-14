@@ -8,7 +8,7 @@ module Fog
         model Fog::OracleCloud::Database::AccessRule
 
         def all(db_name)
-          data = service.list_access_rules(db_name).body
+          data = service.list_access_rules(db_name).body['accessRules']
           load(data)
         end
         

@@ -26,7 +26,6 @@ module Fog
           response = Excon::Response.new
           name = params[:name]
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
-
           self.data[:ip_reservations][name] = {
             'name' => "/Compute-#{@identity_domain}/#{@username}/#{name}",
             'account' => "/Compute-#{@identity_domain}/#{@username}",

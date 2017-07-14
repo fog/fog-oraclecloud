@@ -12,7 +12,7 @@ module Fog
           )
           rule = response.body["accessRules"].detect { |r| r['ruleName'] == rule_name}
           if rule.nil? then
-            raise Fog::OracleCloud::Database::NotFound.new("Could not find rule (#{rule_name}) attached to #{service_name}")
+            raise Fog::OracleCloud::Database::NotFound.new("Could not find rule (#{rule_name}) attached to #{db_name}")
           end
           response.body = rule
           response
@@ -20,28 +20,17 @@ module Fog
       end
 
       class Mock
-        def get_snapshot(db_name, snapshot_name)
+        def get_access_rule(db_name, rule_name)
           response = Excon::Response.new
 
-          if snapshot = self.data[:snapshots][db_name][snapshot_name]
-            case snapshot['status']
-            when 'Terminating'
-              if Time.now - self.data[:deleted_at][snapshot_name] >= Fog::Mock.delay
-                self.data[:deleted_at].delete(snapshot_name)
-                self.data[:snapshots][db_name].delete(snapshot_name)
-              end
-            when 'In Progress'
-              if Time.now - self.data[:created_at][snapshot_name] >= Fog::Mock.delay
-                self.data[:snapshots][db_name][snapshot_name]['status'] = 'Succeeded'
-                snapshot = self.data[:snapshots][db_name][snapshot_name]
-                self.data[:created_at].delete(snapshot_name)
-              end
-            end
+          rule = self.data[:access_rules][db_name].detect { |r| r['ruleName'] == rule_name}
+
+          if !rule.nil? then
             response.status = 200
-            response.body = snapshot
+            response.body = rule
             response
           else
-            raise Fog::OracleCloud::Database::NotFound.new("Snapshot #{snapshot_name} for #{db_name} does not exist");
+            raise Fog::OracleCloud::Database::NotFound.new("Rule #{rule_name} for #{db_name} does not exist");
           end
         end
       end

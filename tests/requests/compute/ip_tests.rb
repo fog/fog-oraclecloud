@@ -55,4 +55,13 @@ Shindo.tests('Fog::Compute[oraclecloud] | compute requests', 'compute') do
 			rule = Fog::Compute[:oraclecloud].ip_reservations.get(ip_name)
 		end
 	end
+
+	tests("#ip-association", "create") do
+		test "it can add a public ip" do
+			compute = Fog::Compute[:oraclecloud].instances.create(:name=>'Test', :sshkeys=>['TestSSHKey'])
+			compute.wait_for { ready? }
+			compute.add_public_ip_address
+			compute.get_public_ip_address.is_a? String
+		end
+	end
 end

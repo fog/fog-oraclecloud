@@ -209,10 +209,20 @@ module Fog
           service.scale_instance(service_name, :additional_storage=>size, :usage=>type).body
         end
 
+        def access_rules
+          requires :service_name
+          service.access_rules.all(service_name)
+        end
+
+        def get_access_rule(rule_name)
+          requires :service_name
+          service.access_rules.get(service_name, rule_name)
+        end
+
         def add_rule(port, ip, rule_name=nil)
           if !rule_name then rule_name = "#{service_name}_#{port}_#{ip}" end
           begin
-            rule = service.access_rules.get(service_name, rule_name)
+            rule = get_access_rule(rule_name)
           rescue Fog::OracleCloud::Database::NotFound    
             Fog::Logger.debug "Add access rule (#{rule_name}) to (#{service_name}) on port #{port}"
             rule = service.access_rules.create(service_name, :ports=>port, :source=>ip, :destination=>'DB', :ruleName=>rule_name)

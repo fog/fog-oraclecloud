@@ -70,7 +70,7 @@ module Fog
             'storage_attachments' => [],
             'tags' => [],
             'uri'=>"#{@api_endpoint}/instance/Compute-#{@identity_domain}/#{@username}/#{name}",
-            'vcable_id'=>"/Compute-#{@identity_domain}/#{@username}/", # TODO: add random id
+            'vcable_id'=>"/Compute-#{@identity_domain}/#{@username}/#{SecureRandom.uuid}", # TODO: add random id
             'virtio'=>nil,
             'vnc'=>'127.0.0.1:5900'
           }

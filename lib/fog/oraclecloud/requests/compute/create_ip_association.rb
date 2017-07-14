@@ -29,6 +29,13 @@ module Fog
             'parentpool' => params[:parentpool],
             'vcable' => params[:vcable]
           }
+          instance = self.data[:instances].detect { |i|i[1]['vcable_id'] = params[:vcable]}
+          if instance.nil? then
+            # TODO: Add error handling. And don't create ip association
+          else
+            # Update it's networking
+            instance[1]['networking']['eth0']['nat']="#{params[:parentpool]}"
+          end
           response.status = 201
           response.body = self.data[:ip_associations][name]
           response

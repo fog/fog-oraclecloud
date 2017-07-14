@@ -6,7 +6,7 @@ module Fog
           response = request(
             :expects  => 200,
             :method   => 'GET',
-            :path     => "/paas/service/dbcs/api/v1.1/instances/#{@identity_domain}/#{db_name}/patches"
+            :path     => "/paas/api/v1.1/instancemgmt/#{@identity_domain}/services/dbaas/instances/#{db_name}/patches/available"
           )
           response
         end

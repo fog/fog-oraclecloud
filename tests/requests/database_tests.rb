@@ -127,6 +127,18 @@ Shindo.tests('Fog::Database[oraclecloud] | database requests', 'database') do
 		end
 	end
 
+	tests("#database-access_rules") do
+		instance = Fog::OracleCloud[:database].instances.first
+		access_rules = instance.access_rules
+		test "should get access_rules" do
+			access_rules.is_a? Array
+		end
+		test "should get rule" do
+			rule = instance.get_access_rule('ora_p2_ssh')
+			rule.ruleName == 'ora_p2_ssh'
+		end
+	end
+
 	tests("#database-recoveries-create", "create") do
 		instance = Fog::OracleCloud[:database].instances.first
 		tag = instance.backups.first.db_tag

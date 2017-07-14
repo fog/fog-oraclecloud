@@ -91,6 +91,18 @@ module Fog
             "hostname"=>"db12c-xp-rac1"
           }
           self.data[:servers][config[:service_name]] = [node]
+          
+          # And some access rules
+          if self.data[:access_rules][config[:service_name]].nil? then self.data[:access_rules][config[:service_name]] = [] end
+          self.data[:access_rules][config[:service_name]] << {
+            "ruleName"=>"ora_p2_ssh",
+            "destination"=>"DB",
+            "ports"=>22,
+            "source"=>"PUBLIC-INTERNET",
+            "status"=>"enabled",
+            "database_id"=>config[:service_name]
+          }
+
           response.headers['Location'] = "https://dbaas.oraclecloud.com:443/paas/service/dbcs/api/v1.1/instances/#{@identity_domain}/status/create/job/#{job_id}"
           response.status = 202
           response

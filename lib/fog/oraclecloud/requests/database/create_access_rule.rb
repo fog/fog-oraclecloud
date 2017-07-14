@@ -36,8 +36,8 @@ module Fog
             'ruleType'=>'USER',
             'database_id'=>service_name
           }
-          if !self.data[:access_rules].key?(service_name) then self.data[:access_rules][service_name] = {} end
-          self.data[:access_rules][service_name][name] = data
+          if !self.data[:access_rules].key?(service_name) then self.data[:access_rules][service_name] = [] end
+          self.data[:access_rules][service_name] << data
           response.status = 202
           response
         end

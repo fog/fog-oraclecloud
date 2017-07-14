@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-Before you can use fog-aws, you must require it in your application:
+Before you can use fog-oraclecloud, you must require it in your application:
 
 ```ruby
 require 'fog/oraclecloud'

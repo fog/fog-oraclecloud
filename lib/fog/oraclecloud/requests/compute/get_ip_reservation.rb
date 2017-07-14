@@ -21,7 +21,6 @@ module Fog
         def get_ip_reservation(name)
           response = Excon::Response.new
           clean_name = name.sub "/Compute-#{@identity_domain}/#{@username}/", ''
-
           if ip = self.data[:ip_reservations][clean_name] 
             response.status = 200
             response.body = ip

@@ -37,8 +37,11 @@ module Fog
       request :backup_instance
       request :recover_instance
       request :list_patches
+
       request :create_access_rule
       request :get_access_rule
+      request :list_access_rules
+
 
       class Real
 
@@ -48,7 +51,7 @@ module Fog
       		@identity_domain   = options[:oracle_domain]
           region_url = options[:oracle_region] == 'emea' ? 'https://dbcs.emea.oraclecloud.com' : 'https://dbaas.oraclecloud.com'
           Excon.ssl_verify_peer = false
-
+          Fog::Logger.debug("Using region_url #{region_url}")
           @connection = Fog::XML::Connection.new(region_url)
       	end
 
@@ -66,7 +69,7 @@ module Fog
 
         def request(params, parse_json = true, &block)
           begin
-            Fog::Logger.debug("Sending #{params[:body].to_s} to #{params[:path]}")
+            Fog::Logger.debug("Sending #{params[:body].to_s} to (#{params[:method]}):#{params[:path]}")
             response = @connection.request(params.merge!({
               :headers  => {
                 'Authorization' => auth_header,
