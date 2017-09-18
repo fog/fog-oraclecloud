@@ -49,6 +49,9 @@ module Fog
       model :storage_attachment
       collection :storage_attachments
 
+      model :shape
+      collection :shapes
+
 			request_path 'fog/oraclecloud/requests/compute'
      	request :list_security_applications
      	request :create_security_application
@@ -121,6 +124,9 @@ module Fog
       request :create_storage_attachment
 
       request :create_security_association
+
+      request :get_shape
+      request :list_shapes
 
 			class Real
 
@@ -197,6 +203,7 @@ module Fog
           @data ||= {
             :instances => {},
             :sshkeys => {},
+            :shapes => {},
             :orchestrations => {},
             :ip_reservations => {},
             :ip_networks => {},
