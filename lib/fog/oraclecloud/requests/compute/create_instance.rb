@@ -12,7 +12,8 @@ module Fog
               'shape'					      => shape,
               'imagelist'					  => imagelist,
               'label'               => label,
-              'sshkeys'             => sshkeys
+              'sshkeys'             => sshkeys,
+              'tags'                => tags
             }]
           }
           body_data = body_data.reject {|key, value| value.nil?}
