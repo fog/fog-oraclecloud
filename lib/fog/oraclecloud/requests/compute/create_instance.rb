@@ -2,7 +2,7 @@ module Fog
   module Compute
     class OracleCloud
       class Real
-      	def create_instance (name, shape, imagelist, label, sshkeys)
+      	def create_instance (name, shape, imagelist, label, sshkeys, tags="")
           # This will create an instance using a Launchplan. Consider using an orchestration plan for more control
           # Just in case it's already set
           name.sub! "/Compute-#{@identity_domain}/#{@username}/", ''
