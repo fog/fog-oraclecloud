@@ -7,11 +7,14 @@ module Fog
 
     	model Fog::Compute::OracleCloud::Image
 
-		def get(name)
+    def get(name)
             data = service.get_image(name).body
             new(data)
         end
-
+    def get_public(name)
+            data = service.get_image_public(name).body
+            new(data)
+        end
 		def all
 			data = service.list_images().body['result']
 			load(data)
